@@ -8,6 +8,7 @@
     'depends': ['web'],
     'data': [
         'security/ir.model.access.csv',
+        'views/training_course.xml',
        
         
     ],
