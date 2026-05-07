@@ -1,2 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 training.course,training.course,model_training_course,,1,1,1,1
+training.student,training.student,model_training_student,,1,1,1,1
+training.enrollment,training.enrollment,model_training_enrollment,,1,1,1,1
