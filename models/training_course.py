@@ -40,7 +40,31 @@ class TrainingCourse(models.Model):
         string="Status",
         default="draft",
     )
+    enrollment_ids = fields.One2many(
+        "training.enrollment",
+        "course_id",
+        string="Enrollments",
+    )
 
+    enrollment_count = fields.Integer(
+        string="Enrollments",
+        compute="_compute_enrollment_count",
+    )
+
+    def _compute_enrollment_count(self):
+     for rec in self:
+        rec.enrollment_count = len(rec.enrollment_ids)
+
+    def action_open_enrollments(self):
+     self.ensure_one()
+     return {
+            "type": "ir.actions.act_window",
+            "name": "Course Enrollments",
+            "res_model": "training.enrollment",
+            "view_mode": "tree,form",
+            "domain": [("course_id", "=", self.id)],
+            "context": {"default_course_id": self.id},
+        }
     @api.depends("fee", "discount")
     def _compute_final_fee(self):
         for rec in self:
