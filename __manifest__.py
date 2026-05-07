@@ -9,6 +9,8 @@
     'data': [
         'security/ir.model.access.csv',
         'views/training_course.xml',
+        'views/training_student_views.xml',
+        'views/training_enrollment_views.xml',
        
         
     ],
