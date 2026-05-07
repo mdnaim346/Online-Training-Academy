@@ -1,0 +1,113 @@
+<odoo>
+
+    <record id="view_training_enrollment_tree" model="ir.ui.view">
+        <field name="name">training.enrollment.tree</field>
+        <field name="model">training.enrollment</field>
+        <field name="arch" type="xml">
+            <tree decoration-success="state == 'paid'"
+                  decoration-warning="state == 'draft'"
+                  decoration-danger="state == 'cancelled'">
+                <field name="student_id"/>
+                <field name="course_id"/>
+                <field name="enrollment_date"/>
+                <field name="course_fee"/>
+                <field name="paid_amount"/>
+                <field name="due_amount"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_training_enrollment_form" model="ir.ui.view">
+        <field name="name">training.enrollment.form</field>
+        <field name="model">training.enrollment</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_confirm"
+                            type="object"
+                            string="Confirm"
+                            class="btn-primary"
+                            invisible="state != 'draft'"/>
+
+                    <button name="action_mark_paid"
+                            type="object"
+                            string="Mark Paid"
+                            class="btn-success"
+                            invisible="state != 'confirmed'"/>
+
+                    <button name="action_cancel"
+                            type="object"
+                            string="Cancel"
+                            invisible="state in ('paid', 'cancelled')"/>
+
+                    <field name="state"
+                           widget="statusbar"
+                           statusbar_visible="draft,confirmed,paid"/>
+                </header>
+
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="student_id"/>
+                            <field name="course_id"/>
+                            <field name="enrollment_date"/>
+                        </group>
+
+                        <group>
+                            <field name="course_fee"/>
+                            <field name="paid_amount"/>
+                            <field name="due_amount"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_training_enrollment_search" model="ir.ui.view">
+        <field name="name">training.enrollment.search</field>
+        <field name="model">training.enrollment</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="student_id"/>
+                <field name="course_id"/>
+
+                <filter name="draft"
+                        string="Draft"
+                        domain="[('state','=','draft')]"/>
+
+                <filter name="confirmed"
+                        string="Confirmed"
+                        domain="[('state','=','confirmed')]"/>
+
+                <filter name="paid"
+                        string="Paid"
+                        domain="[('state','=','paid')]"/>
+
+                <group expand="0" string="Group By">
+                    <filter name="group_course"
+                            string="Course"
+                            context="{'group_by':'course_id'}"/>
+
+                    <filter name="group_state"
+                            string="Status"
+                            context="{'group_by':'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_training_enrollment" model="ir.actions.act_window">
+        <field name="name">Enrollments</field>
+        <field name="res_model">training.enrollment</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_training_enrollment"
+              name="Enrollments"
+              parent="menu_training_root"
+              action="action_training_enrollment"
+              sequence="30"/>
+
+</odoo>
