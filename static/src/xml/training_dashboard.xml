@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates xml:space="preserve">
+
+    <t t-name="training_academy.TrainingDashboard">
+
+        <div class="p-4">
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2>Training Academy Dashboard</h2>
+                    <p class="text-muted">
+                        Overview of courses, students, trainers, enrollments, and revenue.
+                    </p>
+                </div>
+
+                <button class="btn btn-primary"
+                        t-on-click="refreshDashboard">
+                    Refresh
+                </button>
+            </div>
+
+            <div class="row mb-4">
+
+                <div class="col-md-4 mb-3">
+                    <div class="card shadow-sm p-3"
+                         t-on-click="openCourses"
+                         style="cursor:pointer;">
+                        <h6>Total Courses</h6>
+                        <h2>
+                            <t t-esc="state.totalCourses"/>
+                        </h2>
+                    </div>
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <div class="card shadow-sm p-3"
+                         t-on-click="openStudents"
+                         style="cursor:pointer;">
+                        <h6>Total Students</h6>
+                        <h2>
+                            <t t-esc="state.totalStudents"/>
+                        </h2>
+                    </div>
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <div class="card shadow-sm p-3"
+                         t-on-click="openTrainers"
+                         style="cursor:pointer;">
+                        <h6>Total Trainers</h6>
+                        <h2>
+                            <t t-esc="state.totalTrainers"/>
+                        </h2>
+                    </div>
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <div class="card shadow-sm p-3"
+                         t-on-click="openEnrollments"
+                         style="cursor:pointer;">
+                        <h6>Total Enrollments</h6>
+                        <h2>
+                            <t t-esc="state.totalEnrollments"/>
+                        </h2>
+                    </div>
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <div class="card shadow-sm p-3"
+                         t-on-click="openPaidEnrollments"
+                         style="cursor:pointer;">
+                        <h6>Paid Enrollments</h6>
+                        <h2>
+                            <t t-esc="state.paidEnrollments"/>
+                        </h2>
+                    </div>
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <div class="card shadow-sm p-3">
+                        <h6>Total Revenue</h6>
+                        <h2>
+                            <t t-esc="state.totalRevenue"/>
+                        </h2>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="card shadow-sm p-3">
+
+                <h4>Latest Enrollments</h4>
+
+                <table class="table table-sm table-bordered mt-3">
+                    <thead>
+                        <tr>
+                            <th>Student</th>
+                            <th>Course</th>
+                            <th>Paid</th>
+                            <th>Due</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr t-foreach="state.latestEnrollments"
+                            t-as="enrollment"
+                            t-key="enrollment.id">
+
+                            <td>
+                                <t t-esc="enrollment.student_id[1]"/>
+                            </td>
+
+                            <td>
+                                <t t-esc="enrollment.course_id[1]"/>
+                            </td>
+
+                            <td>
+                                <t t-esc="enrollment.paid_amount"/>
+                            </td>
+
+                            <td>
+                                <t t-esc="enrollment.due_amount"/>
+                            </td>
+
+                            <td>
+                                <t t-esc="enrollment.state"/>
+                            </td>
+
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+
+    </t>
+
+</templates>

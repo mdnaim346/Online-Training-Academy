@@ -2,7 +2,7 @@
     "name": "Training Academy",
     "version": "1.0",
     "license": "LGPL-3",
-    "depends": ["base"],
+    "depends": ["base", "web"],
     "data": [
         "security/training_security.xml",
         "security/ir.model.access.csv",
@@ -11,11 +11,18 @@
         "views/training_trainer_views.xml",
         "views/training_student_views.xml",
         "views/training_enrollment_views.xml",
+        "views/training_dashboard_menu.xml",
 
         "reports/course_report_template.xml",
         "reports/enrollment_receipt_template.xml",
         "reports/report_action.xml",
     ],
+    "assets": {
+        "web.assets_backend": [
+            "Training_academy_management_system/static/src/js/training_dashboard.js",
+            "Training_academy_management_system/static/src/xml/training_dashboard.xml",
+        ],
+    },
     "installable": True,
     "application": True,
 }
