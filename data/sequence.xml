@@ -1,0 +1,8 @@
+<odoo>
+    <record id="seq_training_course" model="ir.sequence">
+        <field name="name">Training Course</field>
+        <field name="code">training.course</field>
+        <field name="prefix">COURSE/</field>
+        <field name="padding">5</field>
+    </record>
+</odoo>

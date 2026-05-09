@@ -10,7 +10,11 @@ class TrainingCourse(models.Model):
     name = fields.Char(string="Course Name", required=True)
     code = fields.Char(string="Course Code", readonly=True, copy=False)
 
-    trainer_name = fields.Char(string="Trainer Name")
+    trainer_id = fields.Many2one(
+    "training.trainer",
+    string="Trainer",
+    ondelete="restrict",
+)
     start_date = fields.Date(string="Start Date")
     duration_days = fields.Integer(string="Duration Days", default=1)
 

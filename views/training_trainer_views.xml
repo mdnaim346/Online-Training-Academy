@@ -1,0 +1,111 @@
+<odoo>
+
+    <record id="view_training_trainer_tree" model="ir.ui.view">
+        <field name="name">training.trainer.tree</field>
+        <field name="model">training.trainer</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="email"/>
+                <field name="phone"/>
+                <field name="expertise"/>
+                <field name="course_count"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_training_trainer_form" model="ir.ui.view">
+        <field name="name">training.trainer.form</field>
+        <field name="model">training.trainer</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_courses"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-book">
+                            <field name="course_count"
+                                   widget="statinfo"
+                                   string="Courses"/>
+                        </button>
+                    </div>
+
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group>
+                            <field name="email"/>
+                            <field name="phone"/>
+                        </group>
+
+                        <group>
+                            <field name="expertise"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Courses">
+                            <field name="course_ids">
+                                <tree>
+                                    <field name="code"/>
+                                    <field name="name"/>
+                                    <field name="start_date"/>
+                                    <field name="final_fee"/>
+                                    <field name="state"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_training_trainer_search" model="ir.ui.view">
+        <field name="name">training.trainer.search</field>
+        <field name="model">training.trainer</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="email"/>
+                <field name="expertise"/>
+
+                <filter name="active"
+                        string="Active"
+                        domain="[('active','=',True)]"/>
+
+                <filter name="inactive"
+                        string="Inactive"
+                        domain="[('active','=',False)]"/>
+
+                <group expand="0" string="Group By">
+                    <filter name="group_expertise"
+                            string="Expertise"
+                            context="{'group_by':'expertise'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_training_trainer" model="ir.actions.act_window">
+        <field name="name">Trainers</field>
+        <field name="res_model">training.trainer</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_training_trainer"
+              name="Trainers"
+              parent="menu_training_root"
+              action="action_training_trainer"
+              sequence="15"/>
+
+</odoo>
