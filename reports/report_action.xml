@@ -1,0 +1,45 @@
+<odoo>
+
+    <!-- COURSE REPORT -->
+    <record id="action_report_training_course"
+            model="ir.actions.report">
+
+        <field name="name">Course Report</field>
+
+        <field name="model">training.course</field>
+
+        <field name="report_type">qweb-pdf</field>
+
+        <field name="report_name">Training_academy_management_system.report_training_course_template</field>
+
+        <field name="report_file">Training_academy_management_system.report_training_course_template</field>
+
+        <field name="binding_model_id"
+               ref="model_training_course"/>
+
+        <field name="binding_type">report</field>
+
+    </record>
+
+    <!-- ENROLLMENT RECEIPT -->
+    <record id="action_report_training_enrollment"
+            model="ir.actions.report">
+
+        <field name="name">Enrollment Receipt</field>
+
+        <field name="model">training.enrollment</field>
+
+        <field name="report_type">qweb-pdf</field>
+
+        <field name="report_name">Training_academy_management_system.report_training_enrollment_template</field>
+
+        <field name="report_file">Training_academy_management_system.report_training_enrollment_template</field>
+
+        <field name="binding_model_id"
+               ref="model_training_enrollment"/>
+
+        <field name="binding_type">report</field>
+
+    </record>
+
+</odoo>
