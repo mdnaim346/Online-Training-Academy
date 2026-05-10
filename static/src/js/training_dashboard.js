@@ -10,6 +10,7 @@ class TrainingDashboard extends Component {
         this.action = useService("action");
 
         this.state = useState({
+            waitingApproval: 0,
             totalCourses: 0,
             totalStudents: 0,
             totalTrainers: 0,
@@ -49,6 +50,10 @@ class TrainingDashboard extends Component {
             "training.enrollment",
             [["state", "=", "paid"]]
         );
+        this.state.waitingApproval = await this.orm.searchCount(
+            "training.enrollment",
+            [["state", "=", "waiting_approval"]]
+        );
 
         const paidRecords = await this.orm.searchRead(
             "training.enrollment",
@@ -76,6 +81,16 @@ class TrainingDashboard extends Component {
             }
         );
     }
+    openWaitingApproval() {
+    this.action.doAction({
+        type: "ir.actions.act_window",
+        name: "Waiting Approval",
+        res_model: "training.enrollment",
+        domain: [["state", "=", "waiting_approval"]],
+        views: [[false, "list"], [false, "form"]],
+        target: "current",
+    });
+}
 
     openCourses() {
         this.action.doAction({

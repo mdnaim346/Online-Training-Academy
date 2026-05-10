@@ -54,6 +54,27 @@ class TrainingCourse(models.Model):
         string="Enrollment Count",
         compute="_compute_enrollment_count",
     )
+    def _cron_complete_old_courses(self):
+        today = fields.Date.today()
+
+        courses = self.search([
+            ("state", "=", "confirmed"),
+            ("start_date", "<", today),
+        ])
+
+        for course in courses:
+            course.state = "done"
+    def _cron_complete_old_courses(self):
+
+        today = fields.Date.today()
+
+        courses = self.search([
+            ("state", "=", "confirmed"),
+            ("start_date", "<", today),
+        ])
+
+        for course in courses:
+            course.state = "done"
 
     def _compute_enrollment_count(self):
      for rec in self:

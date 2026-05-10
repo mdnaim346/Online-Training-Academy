@@ -21,6 +21,16 @@
             </div>
 
             <div class="row mb-4">
+            <div class="col-md-4 mb-3">
+                <div class="card shadow-sm p-3"
+                    t-on-click="openWaitingApproval"
+                    style="cursor:pointer;">
+                    <h6>Waiting Approval</h6>
+                    <h2>
+                        <t t-esc="state.waitingApproval"/>
+                    </h2>
+                </div>
+            </div>
 
                 <div class="col-md-4 mb-3">
                     <div class="card shadow-sm p-3"

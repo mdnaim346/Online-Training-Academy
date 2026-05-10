@@ -2,7 +2,7 @@
     "name": "Training Academy",
     "version": "1.0",
     "license": "LGPL-3",
-    "depends": ["base", "web"],
+    "depends": ["base", "web", "mail"],
     "data": [
         "security/training_security.xml",
         "security/ir.model.access.csv",
@@ -16,6 +16,7 @@
         "reports/course_report_template.xml",
         "reports/enrollment_receipt_template.xml",
         "reports/report_action.xml",
+          "data/cron.xml",
     ],
     "assets": {
         "web.assets_backend": [
