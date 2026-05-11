@@ -4,13 +4,13 @@
 
     <t t-name="training_academy.TrainingDashboard">
 
-        <div class="p-4">
+        <div class="training-dashboard p-4 style="background-color:#f8f9fa"">
 
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
-                    <h2>Training Academy Dashboard</h2>
+                    <h2>Training Academy Analytics Dashboard</h2>
                     <p class="text-muted">
-                        Overview of courses, students, trainers, enrollments, and revenue.
+                        Business overview of courses, enrollments, payments, and approvals.
                     </p>
                 </div>
 
@@ -21,18 +21,8 @@
             </div>
 
             <div class="row mb-4">
-            <div class="col-md-4 mb-3">
-                <div class="card shadow-sm p-3"
-                    t-on-click="openWaitingApproval"
-                    style="cursor:pointer;">
-                    <h6>Waiting Approval</h6>
-                    <h2>
-                        <t t-esc="state.waitingApproval"/>
-                    </h2>
-                </div>
-            </div>
 
-                <div class="col-md-4 mb-3">
+                <div class="col-md-3 mb-3">
                     <div class="card shadow-sm p-3"
                          t-on-click="openCourses"
                          style="cursor:pointer;">
@@ -43,7 +33,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-4 mb-3">
+                <div class="col-md-3 mb-3">
                     <div class="card shadow-sm p-3"
                          t-on-click="openStudents"
                          style="cursor:pointer;">
@@ -54,7 +44,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-4 mb-3">
+                <div class="col-md-3 mb-3">
                     <div class="card shadow-sm p-3"
                          t-on-click="openTrainers"
                          style="cursor:pointer;">
@@ -65,7 +55,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-4 mb-3">
+                <div class="col-md-3 mb-3">
                     <div class="card shadow-sm p-3"
                          t-on-click="openEnrollments"
                          style="cursor:pointer;">
@@ -76,7 +66,18 @@
                     </div>
                 </div>
 
-                <div class="col-md-4 mb-3">
+                <div class="col-md-3 mb-3">
+                    <div class="card shadow-sm p-3"
+                         t-on-click="openWaitingApproval"
+                         style="cursor:pointer;">
+                        <h6>Waiting Approval</h6>
+                        <h2>
+                            <t t-esc="state.waitingApproval"/>
+                        </h2>
+                    </div>
+                </div>
+
+                <div class="col-md-3 mb-3">
                     <div class="card shadow-sm p-3"
                          t-on-click="openPaidEnrollments"
                          style="cursor:pointer;">
@@ -87,12 +88,43 @@
                     </div>
                 </div>
 
-                <div class="col-md-4 mb-3">
+                <div class="col-md-3 mb-3">
                     <div class="card shadow-sm p-3">
                         <h6>Total Revenue</h6>
                         <h2>
                             <t t-esc="state.totalRevenue"/>
                         </h2>
+                    </div>
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <div class="card shadow-sm p-3"
+                         t-on-click="openDuePayments"
+                         style="cursor:pointer;">
+                        <h6>Total Due</h6>
+                        <h2>
+                            <t t-esc="state.totalDue"/>
+                        </h2>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row mb-4">
+
+                <div class="col-md-6 mb-3">
+                    <div class="card shadow-sm p-3">
+                        <h4>Revenue Overview</h4>
+                        <canvas t-ref="revenueChart"/>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <div class="card shadow-sm p-3">
+                        <h4>Enrollment Status</h4>
+                        <div class="training-dashboard-status-chart">
+                            <canvas t-ref="statusChart"/>
+                        </div>
                     </div>
                 </div>
 
@@ -119,11 +151,11 @@
                             t-key="enrollment.id">
 
                             <td>
-                                <t t-esc="enrollment.student_id[1]"/>
+                                <t t-esc="enrollment.student_id ? enrollment.student_id[1] : ''"/>
                             </td>
 
                             <td>
-                                <t t-esc="enrollment.course_id[1]"/>
+                                <t t-esc="enrollment.course_id ? enrollment.course_id[1] : ''"/>
                             </td>
 
                             <td>

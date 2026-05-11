@@ -21,6 +21,7 @@
     "assets": {
         "web.assets_backend": [
              "https://cdn.jsdelivr.net/npm/chart.js",
+            "Training_academy_management_system/static/src/css/training_dashboard.css",
             "Training_academy_management_system/static/src/js/training_dashboard.js",
             "Training_academy_management_system/static/src/xml/training_dashboard.xml",
         ],

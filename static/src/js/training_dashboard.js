@@ -1,10 +1,13 @@
 /** @odoo-module **/
 
-import { Component,
+import {
+    Component,
     onWillStart,
     onMounted,
     useRef,
-    useState } from "@odoo/owl";
+    useState,
+} from "@odoo/owl";
+
 import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
 
@@ -12,23 +15,35 @@ class TrainingDashboard extends Component {
     setup() {
         this.orm = useService("orm");
         this.action = useService("action");
+
         this.revenueChartRef = useRef("revenueChart");
         this.statusChartRef = useRef("statusChart");
 
+        this.revenueChart = null;
+        this.statusChart = null;
+
         this.state = useState({
-            waitingApproval: 0,
             totalCourses: 0,
             totalStudents: 0,
             totalTrainers: 0,
             totalEnrollments: 0,
+
+            draftEnrollments: 0,
+            waitingApproval: 0,
+            confirmedEnrollments: 0,
             paidEnrollments: 0,
+            cancelledEnrollments: 0,
+
             totalRevenue: 0,
+            totalDue: 0,
+
             latestEnrollments: [],
         });
 
         onWillStart(async () => {
             await this.loadDashboardData();
         });
+
         onMounted(() => {
             this.renderCharts();
         });
@@ -55,23 +70,43 @@ class TrainingDashboard extends Component {
             []
         );
 
-        this.state.paidEnrollments = await this.orm.searchCount(
+        this.state.draftEnrollments = await this.orm.searchCount(
             "training.enrollment",
-            [["state", "=", "paid"]]
+            [["state", "=", "draft"]]
         );
+
         this.state.waitingApproval = await this.orm.searchCount(
             "training.enrollment",
             [["state", "=", "waiting_approval"]]
         );
 
-        const paidRecords = await this.orm.searchRead(
+        this.state.confirmedEnrollments = await this.orm.searchCount(
             "training.enrollment",
-            [["state", "=", "paid"]],
-            ["paid_amount"]
+            [["state", "=", "confirmed"]]
         );
 
-        this.state.totalRevenue = paidRecords.reduce((total, rec) => {
-            return total + rec.paid_amount;
+        this.state.paidEnrollments = await this.orm.searchCount(
+            "training.enrollment",
+            [["state", "=", "paid"]]
+        );
+
+        this.state.cancelledEnrollments = await this.orm.searchCount(
+            "training.enrollment",
+            [["state", "=", "cancelled"]]
+        );
+
+        const enrollments = await this.orm.searchRead(
+            "training.enrollment",
+            [],
+            ["paid_amount", "due_amount"]
+        );
+
+        this.state.totalRevenue = enrollments.reduce((total, rec) => {
+            return total + (rec.paid_amount || 0);
+        }, 0);
+
+        this.state.totalDue = enrollments.reduce((total, rec) => {
+            return total + (rec.due_amount || 0);
         }, 0);
 
         this.state.latestEnrollments = await this.orm.searchRead(
@@ -90,16 +125,83 @@ class TrainingDashboard extends Component {
             }
         );
     }
-    openWaitingApproval() {
-    this.action.doAction({
-        type: "ir.actions.act_window",
-        name: "Waiting Approval",
-        res_model: "training.enrollment",
-        domain: [["state", "=", "waiting_approval"]],
-        views: [[false, "list"], [false, "form"]],
-        target: "current",
-    });
-}
+
+    renderCharts() {
+        if (!this.revenueChartRef.el || !this.statusChartRef.el) {
+            return;
+        }
+
+        if (this.revenueChart) {
+            this.revenueChart.destroy();
+        }
+
+        if (this.statusChart) {
+            this.statusChart.destroy();
+        }
+
+        this.revenueChart = new Chart(this.revenueChartRef.el, {
+            type: "bar",
+            data: {
+                labels: ["Revenue", "Due"],
+                datasets: [
+                    {
+                        label: "Amount",
+                        data: [
+                            this.state.totalRevenue,
+                            this.state.totalDue,
+                        ],
+                    },
+                ],
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                    },
+                },
+            },
+        });
+
+        this.statusChart = new Chart(this.statusChartRef.el, {
+            type: "doughnut",
+            data: {
+                labels: [
+                    "Draft",
+                    "Waiting Approval",
+                    "Confirmed",
+                    "Paid",
+                    "Cancelled",
+                ],
+                datasets: [
+                    {
+                        label: "Enrollments",
+                        data: [
+                            this.state.draftEnrollments,
+                            this.state.waitingApproval,
+                            this.state.confirmedEnrollments,
+                            this.state.paidEnrollments,
+                            this.state.cancelledEnrollments,
+                        ],
+                    },
+                ],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: "bottom",
+                    },
+                },
+            },
+        });
+    }
+
+    async refreshDashboard() {
+        await this.loadDashboardData();
+        this.renderCharts();
+    }
 
     openCourses() {
         this.action.doAction({
@@ -141,6 +243,17 @@ class TrainingDashboard extends Component {
         });
     }
 
+    openWaitingApproval() {
+        this.action.doAction({
+            type: "ir.actions.act_window",
+            name: "Waiting Approval",
+            res_model: "training.enrollment",
+            domain: [["state", "=", "waiting_approval"]],
+            views: [[false, "list"], [false, "form"]],
+            target: "current",
+        });
+    }
+
     openPaidEnrollments() {
         this.action.doAction({
             type: "ir.actions.act_window",
@@ -152,8 +265,15 @@ class TrainingDashboard extends Component {
         });
     }
 
-    async refreshDashboard() {
-        await this.loadDashboardData();
+    openDuePayments() {
+        this.action.doAction({
+            type: "ir.actions.act_window",
+            name: "Due Payments",
+            res_model: "training.enrollment",
+            domain: [["due_amount", ">", 0]],
+            views: [[false, "list"], [false, "form"]],
+            target: "current",
+        });
     }
 }
 
