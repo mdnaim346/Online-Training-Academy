@@ -1,6 +1,10 @@
 /** @odoo-module **/
 
-import { Component, onWillStart, useState } from "@odoo/owl";
+import { Component,
+    onWillStart,
+    onMounted,
+    useRef,
+    useState } from "@odoo/owl";
 import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
 
@@ -8,6 +12,8 @@ class TrainingDashboard extends Component {
     setup() {
         this.orm = useService("orm");
         this.action = useService("action");
+        this.revenueChartRef = useRef("revenueChart");
+        this.statusChartRef = useRef("statusChart");
 
         this.state = useState({
             waitingApproval: 0,
@@ -22,6 +28,9 @@ class TrainingDashboard extends Component {
 
         onWillStart(async () => {
             await this.loadDashboardData();
+        });
+        onMounted(() => {
+            this.renderCharts();
         });
     }
 
