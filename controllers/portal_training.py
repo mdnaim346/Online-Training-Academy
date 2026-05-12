@@ -32,7 +32,7 @@ class TrainingPortal(CustomerPortal):
         }
 
         return request.render(
-            "training_academy.portal_my_training",
+            "Training_academy_management_system.portal_my_training",
             values
         )
 
@@ -72,6 +72,6 @@ class TrainingPortal(CustomerPortal):
         }
 
         return request.render(
-            "training_academy.portal_training_enrollment_detail",
+            "Training_academy_management_system.portal_training_enrollment_detail",
             values
         )
