@@ -36,7 +36,7 @@
                             type="object"
                             string="Approve"
                             class="btn-success"
-                            groups="training_academy.group_training_manager"
+                            groups="Training_academy_management_system.group_training_manager"
                             invisible="state != 'waiting_approval'"/>
 
                     <button name="action_mark_paid"
@@ -44,6 +44,11 @@
                             string="Mark Paid"
                             class="btn-success"
                             invisible="state != 'confirmed'"/>
+                    <button name="%(action_report_training_certificate)d"
+                            type="action"
+                            string="Print Certificate"
+                            class="btn-success"
+                            invisible="state != 'paid'"/>
 
                     <button name="action_cancel"
                             type="object"
@@ -58,6 +63,7 @@
                     <field name="state"
                            widget="statusbar"
                            statusbar_visible="draft,waiting_approval,confirmed,paid"/>
+                        
 
                 </header>
 
@@ -76,12 +82,22 @@
                         </group>
 
                         <group>
+
                             <field name="course_fee" readonly="1"/>
 
                             <field name="paid_amount"
-                                   readonly="state not in ('confirmed', 'paid')"/>
+                                readonly="state not in ('confirmed', 'paid')"/>
 
                             <field name="due_amount" readonly="1"/>
+
+                            <field name="certificate_number"
+                                readonly="1"
+                                invisible="state != 'paid'"/>
+
+                            <field name="completion_date"
+                                readonly="1"
+                                invisible="state != 'paid'"/>
+
                         </group>
                     </group>
 

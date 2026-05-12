@@ -7,6 +7,8 @@
         "security/training_security.xml",
         "security/ir.model.access.csv",
         "data/sequence.xml",
+        "reports/certificate_template.xml",
+        "reports/certificate_report.xml",
         "views/training_course.xml",
         "views/training_trainer_views.xml",
         "views/training_student_views.xml",
@@ -16,7 +18,13 @@
         "reports/course_report_template.xml",
         "reports/enrollment_receipt_template.xml",
         "reports/report_action.xml",
-          "data/cron.xml",
+
+        "data/cron.xml",
+        "data/certificate_sequence.xml",
+          
+
+          
+    
     ],
     "assets": {
         "web.assets_backend": [

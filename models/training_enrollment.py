@@ -60,6 +60,15 @@ class TrainingEnrollment(models.Model):
         default="draft",
         tracking=True,
     )
+    certificate_number = fields.Char(
+        string="Certificate Number",
+        readonly=True,
+        copy=False,
+    )
+
+    completion_date = fields.Date(
+        string="Completion Date",
+    )
 
     @api.depends("course_fee", "paid_amount")
     def _compute_due_amount(self):
@@ -100,7 +109,7 @@ class TrainingEnrollment(models.Model):
 
     def action_approve(self):
         for rec in self:
-            if not self.env.user.has_group("training_academy.group_training_manager"):
+            if not self.env.user.has_group("Training_academy_management_system.group_training_manager"):
                 raise UserError("Only Training Managers can approve enrollments.")
 
             if rec.state != "waiting_approval":
@@ -124,18 +133,33 @@ class TrainingEnrollment(models.Model):
 
     def action_mark_paid(self):
         for rec in self:
+
             if rec.state != "confirmed":
-                raise ValidationError("Only confirmed enrollments can be marked as paid.")
+                raise ValidationError(
+                    "Only confirmed enrollments can be marked as paid."
+                )
 
             if rec.paid_amount < rec.course_fee:
-                raise ValidationError("Paid amount is less than course fee.")
+                raise ValidationError(
+                    "Paid amount is less than course fee."
+                )
 
             rec.state = "paid"
+
+            rec.completion_date = fields.Date.today()
+
+            if not rec.certificate_number:
+                rec.certificate_number = self.env[
+                    "ir.sequence"
+                ].next_by_code(
+                    "training.certificate"
+                )
 
             rec.message_post(
                 body=f"""
                     Payment completed.<br/>
-                    Paid Amount: <b>{rec.paid_amount}</b>
+                    Certificate generated:
+                    <b>{rec.certificate_number}</b>
                 """
             )
 
@@ -165,7 +189,7 @@ class TrainingEnrollment(models.Model):
         activity_type = self.env.ref("mail.mail_activity_data_todo")
 
         manager_group = self.env.ref(
-            "training_academy.group_training_manager",
+            "Training_academy_management_system.group_training_manager",
             raise_if_not_found=False,
         )
 

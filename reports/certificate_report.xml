@@ -1,0 +1,21 @@
+<odoo>
+
+    <record id="action_report_training_certificate" model="ir.actions.report">
+
+        <field name="name">Training Certificate</field>
+
+        <field name="model">training.enrollment</field>
+
+        <field name="report_type">qweb-pdf</field>
+
+        <field name="report_name">Training_academy_management_system.report_training_certificate</field>
+
+        <field name="report_file">Training_academy_management_system.report_training_certificate</field>
+
+        <field name="binding_model_id" ref="model_training_enrollment"/>
+
+        <field name="binding_type">report</field>
+
+    </record>
+
+</odoo>
