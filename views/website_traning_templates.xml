@@ -1,0 +1,240 @@
+<odoo>
+
+    <template id="website_training_courses" name="Training Courses">
+        <t t-call="website.layout">
+            <div class="container py-5">
+
+                <h1 class="mb-4">Available Training Courses</h1>
+
+                <div class="row">
+                    <t t-foreach="courses" t-as="course">
+                        <div class="col-md-4 mb-4">
+                            <div class="card h-100 shadow-sm">
+                                <div class="card-body">
+                                    <h4>
+                                        <t t-esc="course.name"/>
+                                    </h4>
+
+                                    <p class="text-muted">
+                                        Trainer:
+                                        <t t-esc="course.trainer_id.name or 'Not Assigned'"/>
+                                    </p>
+
+                                    <p>
+                                        Fee:
+                                        <strong>
+                                            <t t-esc="course.final_fee"/>
+                                        </strong>
+                                    </p>
+
+                                    <p>
+                                        Available Seats:
+                                        <strong>
+                                            <t t-esc="course.available_seats"/>
+                                        </strong>
+                                    </p>
+
+                                    <a t-att-href="'/training/course/%s' % course.id"
+                                       class="btn btn-primary">
+                                        View Details
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+
+            </div>
+        </t>
+    </template>
+
+    <template id="website_training_course_detail" name="Training Course Detail">
+        <t t-call="website.layout">
+            <div class="container py-5">
+
+                <h1>
+                    <t t-esc="course.name"/>
+                </h1>
+
+                <p class="text-muted">
+                    Course Code:
+                    <t t-esc="course.code"/>
+                </p>
+
+                <hr/>
+
+                <div class="row">
+                    <div class="col-md-8">
+                        <h4>Course Information</h4>
+
+                        <table class="table table-bordered">
+                            <tr>
+                                <th>Trainer</th>
+                                <td>
+                                    <t t-esc="course.trainer_id.name or 'Not Assigned'"/>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th>Start Date</th>
+                                <td>
+                                    <t t-esc="course.start_date"/>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th>Duration</th>
+                                <td>
+                                    <t t-esc="course.duration_days"/> Days
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th>Fee</th>
+                                <td>
+                                    <t t-esc="course.final_fee"/>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th>Available Seats</th>
+                                <td>
+                                    <t t-esc="course.available_seats"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <h4>Enroll Now</h4>
+                                <p>Submit your information to join this course.</p>
+
+                                <a t-att-href="'/training/course/%s/enroll' % course.id"
+                                   class="btn btn-success w-100">
+                                    Enroll Now
+                                </a>
+
+                                <a href="/training/courses"
+                                   class="btn btn-light w-100 mt-2">
+                                    Back to Courses
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </t>
+    </template>
+
+    <template id="website_training_enroll_form" name="Training Enrollment Form">
+        <t t-call="website.layout">
+            <div class="container py-5">
+
+                <h1>Enroll in <t t-esc="course.name"/></h1>
+
+                <t t-if="error">
+                    <div class="alert alert-danger mt-3">
+                        <t t-esc="error"/>
+                    </div>
+                </t>
+
+                <form t-att-action="'/training/course/%s/enroll/submit' % course.id"
+                      method="post"
+                      class="mt-4">
+
+                    <input type="hidden"
+                           name="csrf_token"
+                           t-att-value="request.csrf_token()"/>
+
+                    <div class="mb-3">
+                        <label class="form-label">Student Name</label>
+                        <input type="text"
+                               name="name"
+                               class="form-control"
+                               required="required"/>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email"
+                               name="email"
+                               class="form-control"/>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Phone</label>
+                        <input type="text"
+                               name="phone"
+                               class="form-control"/>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Address</label>
+                        <textarea name="address"
+                                  class="form-control"/>
+                    </div>
+
+                    <button type="submit"
+                            class="btn btn-success">
+                        Submit Enrollment
+                    </button>
+
+                    <a t-att-href="'/training/course/%s' % course.id"
+                       class="btn btn-light">
+                        Cancel
+                    </a>
+
+                </form>
+
+            </div>
+        </t>
+    </template>
+
+    <template id="website_training_enroll_success" name="Training Enrollment Success">
+        <t t-call="website.layout">
+            <div class="container py-5 text-center">
+
+                <div class="alert alert-success">
+                    <h2>Enrollment Submitted Successfully!</h2>
+                    <p>
+                        Your enrollment request has been submitted for approval.
+                    </p>
+                </div>
+
+                <h4>
+                    Student:
+                    <t t-esc="student.name"/>
+                </h4>
+
+                <h4>
+                    Course:
+                    <t t-esc="course.name"/>
+                </h4>
+
+                <p>
+                    Enrollment Status:
+                    <strong>
+                        <t t-esc="enrollment.state"/>
+                    </strong>
+                </p>
+
+                <a href="/training/courses"
+                   class="btn btn-primary mt-3">
+                    Back to Courses
+                </a>
+
+            </div>
+        </t>
+    </template>
+
+    <record id="menu_website_training_courses" model="website.menu">
+        <field name="name">Training Courses</field>
+        <field name="url">/training/courses</field>
+        <field name="parent_id" ref="website.main_menu"/>
+        <field name="sequence">50</field>
+    </record>
+
+</odoo>
