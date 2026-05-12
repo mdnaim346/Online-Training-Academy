@@ -1,0 +1,222 @@
+<odoo>
+
+    <!-- Portal Menu -->
+    <template id="portal_my_home_training"
+              inherit_id="portal.portal_my_home"
+              priority="30">
+
+        <xpath expr="//div[contains(@class, 'o_portal_docs')]"
+               position="inside">
+
+            <a href="/my/training"
+               class="list-group-item list-group-item-action">
+
+                My Training Enrollments
+
+            </a>
+
+        </xpath>
+
+    </template>
+
+    <!-- Enrollment List -->
+    <template id="portal_my_training">
+
+        <t t-call="portal.portal_layout">
+
+            <div class="container py-4">
+
+                <h2 class="mb-4">
+                    My Training Enrollments
+                </h2>
+
+                <t t-if="not enrollments">
+
+                    <div class="alert alert-info">
+                        No enrollments found.
+                    </div>
+
+                </t>
+
+                <t t-if="enrollments">
+
+                    <table class="table table-bordered">
+
+                        <thead>
+                            <tr>
+                                <th>Course</th>
+                                <th>Status</th>
+                                <th>Paid</th>
+                                <th>Due</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            <tr t-foreach="enrollments"
+                                t-as="enrollment">
+
+                                <td>
+                                    <t t-esc="enrollment.course_id.name"/>
+                                </td>
+
+                                <td>
+                                    <span class="badge bg-primary">
+                                        <t t-esc="enrollment.state"/>
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <t t-esc="enrollment.paid_amount"/>
+                                </td>
+
+                                <td>
+                                    <t t-esc="enrollment.due_amount"/>
+                                </td>
+
+                                <td>
+
+                                    <a t-att-href="'/my/training/enrollment/%s' % enrollment.id"
+                                       class="btn btn-sm btn-primary">
+
+                                        View
+
+                                    </a>
+
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </t>
+
+            </div>
+
+        </t>
+
+    </template>
+
+    <!-- Enrollment Detail -->
+    <template id="portal_training_enrollment_detail">
+
+        <t t-call="portal.portal_layout">
+
+            <div class="container py-4">
+
+                <h2 class="mb-4">
+                    Enrollment Detail
+                </h2>
+
+                <div class="card shadow-sm">
+
+                    <div class="card-body">
+
+                        <table class="table table-bordered">
+
+                            <tr>
+                                <th width="30%">
+                                    Course
+                                </th>
+
+                                <td>
+                                    <t t-esc="enrollment.course_id.name"/>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th>
+                                    Trainer
+                                </th>
+
+                                <td>
+                                    <t t-esc="enrollment.course_id.trainer_id.name"/>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th>
+                                    Enrollment Date
+                                </th>
+
+                                <td>
+                                    <t t-esc="enrollment.enrollment_date"/>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th>
+                                    State
+                                </th>
+
+                                <td>
+                                    <span class="badge bg-success">
+                                        <t t-esc="enrollment.state"/>
+                                    </span>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th>
+                                    Course Fee
+                                </th>
+
+                                <td>
+                                    <t t-esc="enrollment.course_fee"/>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th>
+                                    Paid Amount
+                                </th>
+
+                                <td>
+                                    <t t-esc="enrollment.paid_amount"/>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th>
+                                    Due Amount
+                                </th>
+
+                                <td>
+                                    <t t-esc="enrollment.due_amount"/>
+                                </td>
+                            </tr>
+
+                            <tr t-if="enrollment.certificate_number">
+                                <th>
+                                    Certificate
+                                </th>
+
+                                <td>
+
+                                    <a t-att-href="'/report/pdf/training_academy.action_report_training_certificate/%s' % enrollment.id"
+                                       class="btn btn-success btn-sm"
+                                       target="_blank">
+
+                                        Download Certificate
+
+                                    </a>
+
+                                </td>
+                            </tr>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </t>
+
+    </template>
+
+</odoo>

@@ -84,11 +84,18 @@ class WebsiteTraining(http.Controller):
                 }
             )
 
+        partner = request.env["res.partner"].sudo().create({
+            "name": name,
+            "email": email,
+            "phone": phone,
+        })
+
         student = request.env["training.student"].sudo().create({
             "name": name,
             "email": email,
             "phone": phone,
             "address": address,
+            "partner_id": partner.id,
         })
 
         enrollment = request.env["training.enrollment"].sudo().create({

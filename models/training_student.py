@@ -16,6 +16,10 @@ class TrainingStudent(models.Model):
         "student_id",
         string="Enrollments",
     )
+    partner_id = fields.Many2one(
+            "res.partner",
+            string="Partner",
+        )
 
     enrollment_count = fields.Integer(
         string="Enrollment Count",
