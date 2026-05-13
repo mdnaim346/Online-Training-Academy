@@ -5,4 +5,11 @@
         <field name="prefix">COURSE/</field>
         <field name="padding">5</field>
     </record>
+
+    <record id="seq_training_payment" model="ir.sequence">
+        <field name="name">Training Payment Receipt</field>
+        <field name="code">training.payment</field>
+        <field name="prefix">PAY/</field>
+        <field name="padding">5</field>
+    </record>
 </odoo>

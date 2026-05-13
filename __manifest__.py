@@ -11,24 +11,24 @@
         "security/training_security.xml",
         "security/ir.model.access.csv",
         "data/sequence.xml",
+        "data/certificate_sequence.xml",
+        "reports/certificate_template.xml",
+        "reports/course_report_template.xml",
+        "reports/enrollment_receipt_template.xml",
+        "reports/payment_receipt_template.xml",
+        "reports/certificate_report.xml",
+        "reports/report_action.xml",
         "views/training_course.xml",
         "views/training_trainer_views.xml",
         "views/training_attendance_views.xml",
         "views/training_student_views.xml",
         "views/training_enrollment_views.xml",
+        "views/training_payment_views.xml",
         "views/training_dashboard_menu.xml",
         "views/website_traning_templates.xml",
         "views/portal_training_templates.xml",
 
-        "reports/certificate_template.xml",
-        "reports/certificate_report.xml",
-
-        "reports/course_report_template.xml",
-        "reports/enrollment_receipt_template.xml",
-        "reports/report_action.xml",
-
         "data/cron.xml",
-        "data/certificate_sequence.xml",
           
 
           

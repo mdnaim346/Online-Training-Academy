@@ -39,6 +39,12 @@
                             groups="Training_academy_management_system.group_training_manager"
                             invisible="state != 'waiting_approval'"/>
 
+                    <button name="action_add_payment"
+                            type="object"
+                            string="Add Payment"
+                            class="btn-primary"
+                            invisible="state not in ('confirmed', 'paid')"/>
+
                     <button name="action_mark_paid"
                             type="object"
                             string="Mark Paid"
@@ -68,6 +74,16 @@
                 </header>
 
                 <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_payments"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-money">
+                            <field name="payment_count"
+                                   widget="statinfo"
+                                   string="Payments"/>
+                        </button>
+                    </div>
 
                     <group>
                         <group>
@@ -85,8 +101,7 @@
 
                             <field name="course_fee" readonly="1"/>
 
-                            <field name="paid_amount"
-                                readonly="state not in ('confirmed', 'paid')"/>
+                            <field name="paid_amount" readonly="1"/>
 
                             <field name="due_amount" readonly="1"/>
 
@@ -103,6 +118,26 @@
 
                         </group>
                     </group>
+
+                    <notebook>
+                        <page string="Payment History">
+                            <field name="payment_ids" readonly="state == 'cancelled'">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="payment_date"/>
+                                    <field name="amount"/>
+                                    <field name="payment_method"/>
+                                    <field name="reference"/>
+                                    <field name="state"/>
+                                </tree>
+                            </field>
+                            <button name="action_add_payment"
+                                    type="object"
+                                    string="Add Payment"
+                                    class="btn-primary"
+                                    invisible="state not in ('confirmed', 'paid')"/>
+                        </page>
+                    </notebook>
 
                 </sheet>
 

@@ -98,6 +98,51 @@
 
                         <br/>
 
+                        <h4>Payment History</h4>
+
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Receipt</th>
+                                    <th>Date</th>
+                                    <th>Method</th>
+                                    <th>Reference</th>
+                                    <th class="text-end">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="o.payment_ids.filtered(lambda payment: payment.state != 'cancelled')"
+                                   t-as="payment">
+                                    <tr>
+                                        <td>
+                                            <span t-field="payment.name"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="payment.payment_date"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="payment.payment_method"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="payment.reference"/>
+                                        </td>
+                                        <td class="text-end">
+                                            <span t-field="payment.amount"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                                <t t-if="not o.payment_ids.filtered(lambda payment: payment.state != 'cancelled')">
+                                    <tr>
+                                        <td colspan="5" class="text-center">
+                                            No payments recorded.
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+
+                        <br/>
+
                         <div class="mt32">
 
                             <strong>

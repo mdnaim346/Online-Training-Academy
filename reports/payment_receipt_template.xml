@@ -1,0 +1,87 @@
+<odoo>
+
+    <template id="report_training_payment_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2>Payment Receipt</h2>
+
+                        <p>
+                            <strong>Receipt Number:</strong>
+                            <span t-field="o.name"/>
+                        </p>
+
+                        <table class="table table-bordered">
+                            <tbody>
+                                <tr>
+                                    <th width="30%">Student</th>
+                                    <td>
+                                        <span t-field="o.student_id.name"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Course</th>
+                                    <td>
+                                        <span t-field="o.course_id.name"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Enrollment</th>
+                                    <td>
+                                        <span t-field="o.enrollment_id"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Payment Date</th>
+                                    <td>
+                                        <span t-field="o.payment_date"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Payment Method</th>
+                                    <td>
+                                        <span t-field="o.payment_method"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Reference</th>
+                                    <td>
+                                        <span t-field="o.reference"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Paid Amount</th>
+                                    <td>
+                                        <strong>
+                                            <span t-field="o.amount"/>
+                                        </strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Total Paid</th>
+                                    <td>
+                                        <span t-field="o.enrollment_id.paid_amount"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Due Amount</th>
+                                    <td>
+                                        <span t-field="o.enrollment_id.due_amount"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="mt32">
+                            <strong>Authorized Signature</strong>
+                            <br/><br/><br/>
+                            ____________________
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

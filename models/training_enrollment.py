@@ -39,12 +39,14 @@ class TrainingEnrollment(models.Model):
 
     paid_amount = fields.Float(
         string="Paid Amount",
+        compute="_compute_payment_amounts",
+        store=True,
         tracking=True,
     )
 
     due_amount = fields.Float(
         string="Due Amount",
-        compute="_compute_due_amount",
+        compute="_compute_payment_amounts",
         store=True,
     )
 
@@ -93,6 +95,17 @@ class TrainingEnrollment(models.Model):
         string="Attendance Lines",
     )
 
+    payment_ids = fields.One2many(
+        "training.payment",
+        "enrollment_id",
+        string="Payments",
+    )
+
+    payment_count = fields.Integer(
+        string="Payment Count",
+        compute="_compute_payment_count",
+    )
+
     @api.depends(
         "attendance_line_ids.status",
         "attendance_line_ids.session_id.state",
@@ -124,10 +137,20 @@ class TrainingEnrollment(models.Model):
             else:
                 rec.attendance_percentage = 0
 
-    @api.depends("course_fee", "paid_amount")
-    def _compute_due_amount(self):
+    @api.depends("course_fee", "payment_ids.amount", "payment_ids.state")
+    def _compute_payment_amounts(self):
         for rec in self:
+            paid_amount = sum(
+                rec.payment_ids.filtered(
+                    lambda payment: payment.state != "cancelled"
+                ).mapped("amount")
+            )
+            rec.paid_amount = paid_amount
             rec.due_amount = rec.course_fee - rec.paid_amount
+
+    def _compute_payment_count(self):
+        for rec in self:
+            rec.payment_count = len(rec.payment_ids)
 
     @api.constrains("paid_amount")
     def _check_paid_amount(self):
@@ -218,6 +241,34 @@ class TrainingEnrollment(models.Model):
                     <b>{rec.certificate_number}</b>
                 """
             )
+
+    def action_open_payments(self):
+        self.ensure_one()
+        return {
+            "type": "ir.actions.act_window",
+            "name": "Payments",
+            "res_model": "training.payment",
+            "view_mode": "tree,form",
+            "domain": [("enrollment_id", "=", self.id)],
+            "context": {
+                "default_enrollment_id": self.id,
+                "default_amount": self.due_amount if self.due_amount > 0 else 0,
+            },
+        }
+
+    def action_add_payment(self):
+        self.ensure_one()
+        return {
+            "type": "ir.actions.act_window",
+            "name": "Add Payment",
+            "res_model": "training.payment",
+            "view_mode": "form",
+            "target": "current",
+            "context": {
+                "default_enrollment_id": self.id,
+                "default_amount": self.due_amount if self.due_amount > 0 else 0,
+            },
+        }
 
     def action_cancel(self):
         for rec in self:

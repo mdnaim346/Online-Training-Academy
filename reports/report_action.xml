@@ -42,4 +42,25 @@
 
     </record>
 
+    <!-- PAYMENT RECEIPT -->
+    <record id="action_report_training_payment"
+            model="ir.actions.report">
+
+        <field name="name">Payment Receipt</field>
+
+        <field name="model">training.payment</field>
+
+        <field name="report_type">qweb-pdf</field>
+
+        <field name="report_name">Training_academy_management_system.report_training_payment_template</field>
+
+        <field name="report_file">Training_academy_management_system.report_training_payment_template</field>
+
+        <field name="binding_model_id"
+               ref="model_training_payment"/>
+
+        <field name="binding_type">report</field>
+
+    </record>
+
 </odoo>
