@@ -67,6 +67,7 @@ class TrainingAttendanceSession(models.Model):
             if not rec.attendance_line_ids:
                 raise ValidationError("Please generate attendance lines first.")
             rec.state = "confirmed"
+            rec.attendance_line_ids.mapped("enrollment_id")._compute_attendance_percentage()
 
     def action_cancel(self):
         for rec in self:
@@ -127,3 +128,38 @@ class TrainingAttendanceLine(models.Model):
     )
 
     note = fields.Char(string="Note")
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        lines = super().create(vals_list)
+        lines._sync_enrollment()
+        lines.mapped("enrollment_id")._compute_attendance_percentage()
+        return lines
+
+    def write(self, vals):
+        enrollments = self.mapped("enrollment_id")
+        result = super().write(vals)
+        if not self.env.context.get("skip_attendance_enrollment_sync"):
+            self._sync_enrollment()
+        (enrollments | self.mapped("enrollment_id"))._compute_attendance_percentage()
+        return result
+
+    def unlink(self):
+        enrollments = self.mapped("enrollment_id")
+        result = super().unlink()
+        enrollments._compute_attendance_percentage()
+        return result
+
+    def _sync_enrollment(self):
+        for line in self:
+            if not line.student_id or not line.course_id:
+                continue
+
+            enrollment = self.env["training.enrollment"].search([
+                ("student_id", "=", line.student_id.id),
+                ("course_id", "=", line.course_id.id),
+                ("state", "in", ["confirmed", "paid"]),
+            ], limit=1)
+
+            if line.enrollment_id != enrollment:
+                line.with_context(skip_attendance_enrollment_sync=True).enrollment_id = enrollment

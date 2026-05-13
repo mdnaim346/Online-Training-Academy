@@ -87,9 +87,26 @@ class TrainingEnrollment(models.Model):
         store=True,
     )
 
-    @api.depends("student_id", "course_id")
+    attendance_line_ids = fields.One2many(
+        "training.attendance.line",
+        "enrollment_id",
+        string="Attendance Lines",
+    )
+
+    @api.depends(
+        "attendance_line_ids.status",
+        "attendance_line_ids.session_id.state",
+        "student_id",
+        "course_id",
+    )
     def _compute_attendance_percentage(self):
         for rec in self:
+            if not rec.student_id or not rec.course_id:
+                rec.total_sessions = 0
+                rec.present_sessions = 0
+                rec.attendance_percentage = 0
+                continue
+
             lines = self.env["training.attendance.line"].search([
                 ("student_id", "=", rec.student_id.id),
                 ("course_id", "=", rec.course_id.id),
