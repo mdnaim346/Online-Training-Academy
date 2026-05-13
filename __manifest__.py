@@ -11,16 +11,17 @@
         "security/training_security.xml",
         "security/ir.model.access.csv",
         "data/sequence.xml",
-        "reports/certificate_template.xml",
-        "reports/certificate_report.xml",
         "views/training_course.xml",
         "views/training_trainer_views.xml",
+        "views/training_attendance_views.xml",
         "views/training_student_views.xml",
         "views/training_enrollment_views.xml",
         "views/training_dashboard_menu.xml",
         "views/website_traning_templates.xml",
         "views/portal_training_templates.xml",
 
+        "reports/certificate_template.xml",
+        "reports/certificate_report.xml",
 
         "reports/course_report_template.xml",
         "reports/enrollment_receipt_template.xml",
@@ -34,6 +35,9 @@
     
     ],
     "assets": {
+        "web.assets_frontend": [
+            "Training_academy_management_system/static/src/css/training_website.css",
+        ],
         "web.assets_backend": [
              "https://cdn.jsdelivr.net/npm/chart.js",
             "Training_academy_management_system/static/src/css/training_dashboard.css",

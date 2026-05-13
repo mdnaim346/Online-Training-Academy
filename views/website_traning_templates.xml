@@ -2,49 +2,101 @@
 
     <template id="website_training_courses" name="Training Courses">
         <t t-call="website.layout">
-            <div class="container py-5">
+            <section class="training-catalog-hero">
+                <div class="container">
+                    <div class="training-catalog-hero__content">
+                        <span class="training-eyebrow">Professional learning catalog</span>
+                        <h1>Available Training Courses</h1>
+                        <p>
+                            Choose from instructor-led courses with clear schedules, seats,
+                            and enrollment details.
+                        </p>
+                    </div>
+                    <div class="training-catalog-hero__stats">
+                        <div>
+                            <strong>
+                                <t t-esc="len(courses)"/>
+                            </strong>
+                            <span>Open courses</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-                <h1 class="mb-4">Available Training Courses</h1>
+            <section class="training-catalog-section">
+                <div class="container">
+                    <t t-if="courses">
+                        <div class="training-course-grid">
+                            <t t-foreach="courses" t-as="course">
+                                <article class="training-course-card">
+                                    <div class="training-course-card__top">
+                                        <div class="training-course-icon">
+                                            <i class="fa fa-graduation-cap"/>
+                                        </div>
+                                        <span class="training-course-code">
+                                            <t t-esc="course.code or 'Course'"/>
+                                        </span>
+                                    </div>
 
-                <div class="row">
-                    <t t-foreach="courses" t-as="course">
-                        <div class="col-md-4 mb-4">
-                            <div class="card h-100 shadow-sm">
-                                <div class="card-body">
-                                    <h4>
+                                    <h2>
                                         <t t-esc="course.name"/>
-                                    </h4>
+                                    </h2>
 
-                                    <p class="text-muted">
-                                        Trainer:
-                                        <t t-esc="course.trainer_id.name or 'Not Assigned'"/>
+                                    <p class="training-course-trainer">
+                                        <i class="fa fa-user-o"/>
+                                        <span>
+                                            <t t-esc="course.trainer_id.name or 'Trainer not assigned'"/>
+                                        </span>
                                     </p>
 
-                                    <p>
-                                        Fee:
-                                        <strong>
-                                            <t t-esc="course.final_fee"/>
-                                        </strong>
-                                    </p>
+                                    <div class="training-course-meta">
+                                        <div>
+                                            <span>Fee</span>
+                                            <strong>
+                                                <t t-esc="'%.2f' % course.final_fee"/>
+                                            </strong>
+                                        </div>
+                                        <div>
+                                            <span>Seats</span>
+                                            <strong>
+                                                <t t-esc="course.available_seats"/>
+                                            </strong>
+                                        </div>
+                                        <div>
+                                            <span>Duration</span>
+                                            <strong>
+                                                <t t-esc="course.duration_days"/> days
+                                            </strong>
+                                        </div>
+                                    </div>
 
-                                    <p>
-                                        Available Seats:
-                                        <strong>
-                                            <t t-esc="course.available_seats"/>
-                                        </strong>
-                                    </p>
-
-                                    <a t-att-href="'/training/course/%s' % course.id"
-                                       class="btn btn-primary">
-                                        View Details
-                                    </a>
-                                </div>
-                            </div>
+                                    <div class="training-course-footer">
+                                        <span class="training-course-date">
+                                            <i class="fa fa-calendar-o"/>
+                                            <t t-if="course.start_date">
+                                                <t t-esc="course.start_date"/>
+                                            </t>
+                                            <t t-else="">Date pending</t>
+                                        </span>
+                                        <a t-att-href="'/training/course/%s' % course.id"
+                                           class="btn training-course-action">
+                                            View Details
+                                        </a>
+                                    </div>
+                                </article>
+                            </t>
+                        </div>
+                    </t>
+                    <t t-else="">
+                        <div class="training-empty-state">
+                            <i class="fa fa-calendar-check-o"/>
+                            <h2>No courses are open right now</h2>
+                            <p>Confirmed courses with available seats will appear here.</p>
                         </div>
                     </t>
                 </div>
+            </section>
 
-            </div>
         </t>
     </template>
 

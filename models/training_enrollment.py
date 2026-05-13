@@ -69,6 +69,43 @@ class TrainingEnrollment(models.Model):
     completion_date = fields.Date(
         string="Completion Date",
     )
+    attendance_percentage = fields.Float(
+        string="Attendance %",
+        compute="_compute_attendance_percentage",
+        store=True,
+    )
+
+    total_sessions = fields.Integer(
+        string="Total Sessions",
+        compute="_compute_attendance_percentage",
+        store=True,
+    )
+
+    present_sessions = fields.Integer(
+        string="Present Sessions",
+        compute="_compute_attendance_percentage",
+        store=True,
+    )
+
+    @api.depends("student_id", "course_id")
+    def _compute_attendance_percentage(self):
+        for rec in self:
+            lines = self.env["training.attendance.line"].search([
+                ("student_id", "=", rec.student_id.id),
+                ("course_id", "=", rec.course_id.id),
+                ("session_id.state", "=", "confirmed"),
+            ])
+
+            total = len(lines)
+            present = len(lines.filtered(lambda line: line.status == "present"))
+
+            rec.total_sessions = total
+            rec.present_sessions = present
+
+            if total:
+                rec.attendance_percentage = (present / total) * 100
+            else:
+                rec.attendance_percentage = 0
 
     @api.depends("course_fee", "paid_amount")
     def _compute_due_amount(self):
@@ -140,12 +177,14 @@ class TrainingEnrollment(models.Model):
                 )
 
             if rec.paid_amount < rec.course_fee:
+                raise ValidationError("Paid amount is less than course fee.")
+
+            if rec.attendance_percentage < 80:
                 raise ValidationError(
-                    "Paid amount is less than course fee."
+                    "Certificate cannot be generated because attendance is below 80%."
                 )
 
             rec.state = "paid"
-
             rec.completion_date = fields.Date.today()
 
             if not rec.certificate_number:

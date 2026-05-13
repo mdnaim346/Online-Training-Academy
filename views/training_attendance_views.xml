@@ -1,0 +1,125 @@
+<odoo>
+
+    <record id="view_training_attendance_session_tree" model="ir.ui.view">
+        <field name="name">training.attendance.session.tree</field>
+        <field name="model">training.attendance.session</field>
+        <field name="arch" type="xml">
+            <tree decoration-success="state == 'confirmed'"
+                  decoration-warning="state == 'draft'"
+                  decoration-danger="state == 'cancelled'">
+                <field name="name"/>
+                <field name="course_id"/>
+                <field name="session_date"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_training_attendance_session_form" model="ir.ui.view">
+        <field name="name">training.attendance.session.form</field>
+        <field name="model">training.attendance.session</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_generate_students"
+                            type="object"
+                            string="Generate Students"
+                            class="btn-primary"
+                            invisible="state != 'draft'"/>
+
+                    <button name="action_confirm"
+                            type="object"
+                            string="Confirm"
+                            class="btn-success"
+                            invisible="state != 'draft'"/>
+
+                    <button name="action_cancel"
+                            type="object"
+                            string="Cancel"
+                            invisible="state == 'cancelled'"/>
+
+                    <button name="action_reset_to_draft"
+                            type="object"
+                            string="Reset to Draft"
+                            invisible="state != 'cancelled'"/>
+
+                    <field name="state"
+                           widget="statusbar"
+                           statusbar_visible="draft,confirmed"/>
+                </header>
+
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="course_id"
+                                   readonly="state != 'draft'"/>
+                        </group>
+
+                        <group>
+                            <field name="session_date"
+                                   readonly="state != 'draft'"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Attendance Lines">
+                            <field name="attendance_line_ids"
+                                   readonly="state != 'draft'">
+                                <tree editable="bottom">
+                                    <field name="student_id"/>
+                                    <field name="enrollment_id"/>
+                                    <field name="status"/>
+                                    <field name="note"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_training_attendance_session_search" model="ir.ui.view">
+        <field name="name">training.attendance.session.search</field>
+        <field name="model">training.attendance.session</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="course_id"/>
+                <field name="session_date"/>
+
+                <filter name="draft"
+                        string="Draft"
+                        domain="[('state','=','draft')]"/>
+
+                <filter name="confirmed"
+                        string="Confirmed"
+                        domain="[('state','=','confirmed')]"/>
+
+                <group expand="0" string="Group By">
+                    <filter name="group_course"
+                            string="Course"
+                            context="{'group_by':'course_id'}"/>
+
+                    <filter name="group_state"
+                            string="Status"
+                            context="{'group_by':'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_training_attendance_session" model="ir.actions.act_window">
+        <field name="name">Attendance Sessions</field>
+        <field name="res_model">training.attendance.session</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_training_attendance"
+              name="Attendance"
+              parent="menu_training_root"
+              action="action_training_attendance_session"
+              sequence="40"/>
+
+</odoo>
