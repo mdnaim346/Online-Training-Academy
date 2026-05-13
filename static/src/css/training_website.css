@@ -211,6 +211,242 @@
     margin-bottom: 8px;
 }
 
+.training-detail-hero {
+    background:
+        linear-gradient(135deg, rgba(20, 34, 58, 0.95), rgba(36, 107, 115, 0.88)),
+        #14223a;
+    color: #fff;
+    padding: 38px 0 44px;
+}
+
+.training-back-link {
+    align-items: center;
+    color: rgba(255, 255, 255, 0.78);
+    display: inline-flex;
+    font-weight: 700;
+    gap: 8px;
+    margin-bottom: 26px;
+}
+
+.training-back-link:hover,
+.training-back-link:focus {
+    color: #fff;
+    text-decoration: none;
+}
+
+.training-detail-hero__content {
+    align-items: flex-end;
+    display: flex;
+    gap: 28px;
+    justify-content: space-between;
+}
+
+.training-detail-hero h1 {
+    color: #fff;
+    font-size: clamp(2.2rem, 4vw, 3.7rem);
+    font-weight: 800;
+    line-height: 1.08;
+    margin: 0;
+}
+
+.training-detail-hero p {
+    color: rgba(255, 255, 255, 0.76);
+    font-size: 1rem;
+    margin: 14px 0 0;
+}
+
+.training-detail-hero p strong {
+    color: #fff;
+    font-weight: 800;
+}
+
+.training-detail-price {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    min-width: 190px;
+    padding: 18px 22px;
+}
+
+.training-detail-price span {
+    color: rgba(255, 255, 255, 0.74);
+    display: block;
+    font-size: 0.84rem;
+    margin-bottom: 6px;
+}
+
+.training-detail-price strong {
+    color: #fff;
+    font-size: 1.8rem;
+    line-height: 1;
+}
+
+.training-detail-section {
+    background: #f6f8fb;
+    padding: 36px 0 76px;
+}
+
+.training-detail-layout {
+    align-items: start;
+    display: grid;
+    gap: 28px;
+    grid-template-columns: minmax(0, 1fr) 370px;
+}
+
+.training-detail-main,
+.training-enroll-panel {
+    background: #fff;
+    border: 1px solid #e3e8ef;
+    border-radius: 8px;
+    box-shadow: 0 16px 34px rgba(15, 23, 42, 0.08);
+}
+
+.training-detail-main {
+    padding: 28px;
+}
+
+.training-section-heading {
+    border-bottom: 1px solid #edf1f5;
+    margin-bottom: 22px;
+    padding-bottom: 18px;
+}
+
+.training-section-heading span {
+    color: #246b73;
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+
+.training-section-heading h2,
+.training-enroll-panel h2 {
+    color: #172033;
+    font-size: 1.45rem;
+    font-weight: 800;
+    margin: 0;
+}
+
+.training-detail-grid {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.training-detail-item {
+    border: 1px solid #e7ecf2;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.training-detail-item i {
+    align-items: center;
+    background: #e9f4f2;
+    border-radius: 8px;
+    color: #246b73;
+    display: inline-flex;
+    height: 38px;
+    justify-content: center;
+    margin-bottom: 16px;
+    width: 38px;
+}
+
+.training-detail-item span {
+    color: #758195;
+    display: block;
+    font-size: 0.82rem;
+    margin-bottom: 5px;
+}
+
+.training-detail-item strong {
+    color: #172033;
+    display: block;
+    font-size: 1rem;
+}
+
+.training-enroll-panel {
+    padding: 26px;
+    position: sticky;
+    top: 86px;
+}
+
+.training-enroll-panel__icon {
+    align-items: center;
+    background: #eaf7ee;
+    border-radius: 8px;
+    color: #28a745;
+    display: inline-flex;
+    height: 44px;
+    justify-content: center;
+    margin-bottom: 18px;
+    width: 44px;
+}
+
+.training-enroll-panel p {
+    color: #64748b;
+    line-height: 1.65;
+    margin: 12px 0 20px;
+}
+
+.training-enroll-summary {
+    background: #f6f8fb;
+    border: 1px solid #e7ecf2;
+    border-radius: 8px;
+    display: grid;
+    gap: 12px;
+    grid-template-columns: repeat(2, 1fr);
+    margin-bottom: 20px;
+    padding: 14px;
+}
+
+.training-enroll-summary span {
+    color: #758195;
+    display: block;
+    font-size: 0.78rem;
+    margin-bottom: 4px;
+}
+
+.training-enroll-summary strong {
+    color: #172033;
+}
+
+.training-enroll-primary,
+.training-enroll-secondary {
+    border-radius: 6px;
+    display: block;
+    font-weight: 800;
+    padding: 12px 16px;
+    text-align: center;
+    width: 100%;
+}
+
+.training-enroll-primary {
+    background: #28a745;
+    border: 0;
+    color: #fff;
+}
+
+.training-enroll-primary:hover,
+.training-enroll-primary:focus {
+    background: #21883a;
+    color: #fff;
+}
+
+.training-enroll-secondary {
+    background: #eef1f5;
+    border: 0;
+    color: #344054;
+    margin-top: 10px;
+}
+
+.training-enroll-secondary:hover,
+.training-enroll-secondary:focus {
+    background: #e1e7ef;
+    color: #172033;
+}
+
 @media (max-width: 767.98px) {
     .training-catalog-hero {
         padding: 46px 0 34px;
@@ -245,5 +481,40 @@
     .training-course-action {
         text-align: center;
         width: 100%;
+    }
+
+    .training-detail-hero {
+        padding: 30px 0 34px;
+    }
+
+    .training-detail-hero__content {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .training-detail-price {
+        max-width: 230px;
+    }
+
+    .training-detail-section {
+        padding: 22px 0 48px;
+    }
+
+    .training-detail-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .training-detail-main,
+    .training-enroll-panel {
+        padding: 20px;
+    }
+
+    .training-detail-grid,
+    .training-enroll-summary {
+        grid-template-columns: 1fr;
+    }
+
+    .training-enroll-panel {
+        position: static;
     }
 }

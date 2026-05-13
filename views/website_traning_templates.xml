@@ -102,82 +102,116 @@
 
     <template id="website_training_course_detail" name="Training Course Detail">
         <t t-call="website.layout">
-            <div class="container py-5">
+            <section class="training-detail-hero">
+                <div class="container">
+                    <a href="/training/courses" class="training-back-link">
+                        <i class="fa fa-arrow-left"/>
+                        Back to courses
+                    </a>
 
-                <h1>
-                    <t t-esc="course.name"/>
-                </h1>
-
-                <p class="text-muted">
-                    Course Code:
-                    <t t-esc="course.code"/>
-                </p>
-
-                <hr/>
-
-                <div class="row">
-                    <div class="col-md-8">
-                        <h4>Course Information</h4>
-
-                        <table class="table table-bordered">
-                            <tr>
-                                <th>Trainer</th>
-                                <td>
-                                    <t t-esc="course.trainer_id.name or 'Not Assigned'"/>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <th>Start Date</th>
-                                <td>
-                                    <t t-esc="course.start_date"/>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <th>Duration</th>
-                                <td>
-                                    <t t-esc="course.duration_days"/> Days
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <th>Fee</th>
-                                <td>
-                                    <t t-esc="course.final_fee"/>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <th>Available Seats</th>
-                                <td>
-                                    <t t-esc="course.available_seats"/>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-
-                    <div class="col-md-4">
-                        <div class="card shadow-sm">
-                            <div class="card-body">
-                                <h4>Enroll Now</h4>
-                                <p>Submit your information to join this course.</p>
-
-                                <a t-att-href="'/training/course/%s/enroll' % course.id"
-                                   class="btn btn-success w-100">
-                                    Enroll Now
-                                </a>
-
-                                <a href="/training/courses"
-                                   class="btn btn-light w-100 mt-2">
-                                    Back to Courses
-                                </a>
-                            </div>
+                    <div class="training-detail-hero__content">
+                        <div>
+                            <span class="training-eyebrow">Course detail</span>
+                            <h1>
+                                <t t-esc="course.name"/>
+                            </h1>
+                            <p>
+                                Code:
+                                <strong>
+                                    <t t-esc="course.code or 'Pending'"/>
+                                </strong>
+                            </p>
+                        </div>
+                        <div class="training-detail-price">
+                            <span>Course fee</span>
+                            <strong>
+                                <t t-esc="'%.2f' % course.final_fee"/>
+                            </strong>
                         </div>
                     </div>
                 </div>
+            </section>
 
-            </div>
+            <section class="training-detail-section">
+                <div class="container">
+                    <div class="training-detail-layout">
+                        <main class="training-detail-main">
+                            <div class="training-section-heading">
+                                <span>Overview</span>
+                                <h2>Course Information</h2>
+                            </div>
+
+                            <div class="training-detail-grid">
+                                <div class="training-detail-item">
+                                    <i class="fa fa-user-o"/>
+                                    <span>Trainer</span>
+                                    <strong>
+                                        <t t-esc="course.trainer_id.name or 'Not Assigned'"/>
+                                    </strong>
+                                </div>
+                                <div class="training-detail-item">
+                                    <i class="fa fa-calendar-o"/>
+                                    <span>Start Date</span>
+                                    <strong>
+                                        <t t-if="course.start_date">
+                                            <t t-esc="course.start_date"/>
+                                        </t>
+                                        <t t-else="">Date pending</t>
+                                    </strong>
+                                </div>
+                                <div class="training-detail-item">
+                                    <i class="fa fa-clock-o"/>
+                                    <span>Duration</span>
+                                    <strong>
+                                        <t t-esc="course.duration_days"/> Days
+                                    </strong>
+                                </div>
+                                <div class="training-detail-item">
+                                    <i class="fa fa-users"/>
+                                    <span>Available Seats</span>
+                                    <strong>
+                                        <t t-esc="course.available_seats"/>
+                                    </strong>
+                                </div>
+                            </div>
+                        </main>
+
+                        <aside class="training-enroll-panel">
+                            <div class="training-enroll-panel__icon">
+                                <i class="fa fa-check"/>
+                            </div>
+                            <h2>Enroll Now</h2>
+                            <p>Submit your information to reserve a seat in this course.</p>
+
+                            <div class="training-enroll-summary">
+                                <div>
+                                    <span>Seats open</span>
+                                    <strong>
+                                        <t t-esc="course.available_seats"/>
+                                    </strong>
+                                </div>
+                                <div>
+                                    <span>Duration</span>
+                                    <strong>
+                                        <t t-esc="course.duration_days"/> days
+                                    </strong>
+                                </div>
+                            </div>
+
+                            <a t-att-href="'/training/course/%s/enroll' % course.id"
+                               class="btn training-enroll-primary">
+                                Enroll Now
+                            </a>
+
+                            <a href="/training/courses"
+                               class="btn training-enroll-secondary">
+                                Back to Courses
+                            </a>
+                        </aside>
+                    </div>
+                </div>
+            </section>
+
         </t>
     </template>
 
