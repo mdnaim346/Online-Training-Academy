@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="email_template_enrollment_submitted" model="mail.template">
+            <field name="name">Training Enrollment: Submitted</field>
+            <field name="model_id" ref="model_training_enrollment"/>
+            <field name="subject">Enrollment submitted: {{ object.course_id.name }}</field>
+            <field name="email_from">{{ user.email_formatted or '' }}</field>
+            <field name="email_to">{{ object.student_id.email or '' }}</field>
+            <field name="description">Sent automatically when a student submits an enrollment.</field>
+            <field name="body_html" type="html">
+<div style="margin: 0; padding: 0;">
+    <p style="margin: 0; padding: 0; font-size: 13px;">
+        Dear <t t-out="object.student_id.name or ''">Student</t>,
+        <br/><br/>
+        Your enrollment request for <strong t-out="object.course_id.name or ''">Course</strong> has been submitted successfully.
+        <br/><br/>
+        Our training manager will review it and notify you after approval.
+        <br/><br/>
+        Best regards,<br/>
+        <t t-out="user.company_id.name or ''">Training Academy</t>
+    </p>
+</div>
+            </field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+
+        <record id="email_template_enrollment_approved" model="mail.template">
+            <field name="name">Training Enrollment: Approved</field>
+            <field name="model_id" ref="model_training_enrollment"/>
+            <field name="subject">Enrollment approved: {{ object.course_id.name }}</field>
+            <field name="email_from">{{ user.email_formatted or '' }}</field>
+            <field name="email_to">{{ object.student_id.email or '' }}</field>
+            <field name="description">Sent automatically when a training manager approves an enrollment.</field>
+            <field name="body_html" type="html">
+<div style="margin: 0; padding: 0;">
+    <p style="margin: 0; padding: 0; font-size: 13px;">
+        Dear <t t-out="object.student_id.name or ''">Student</t>,
+        <br/><br/>
+        Your enrollment for <strong t-out="object.course_id.name or ''">Course</strong> has been approved.
+        <br/><br/>
+        Enrollment date: <strong t-out="object.enrollment_date or ''">Date</strong>
+        <br/>
+        Course fee: <strong t-out="object.course_fee or 0.0">0.00</strong>
+        <br/><br/>
+        Best regards,<br/>
+        <t t-out="user.company_id.name or ''">Training Academy</t>
+    </p>
+</div>
+            </field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+
+        <record id="email_template_payment_confirmed" model="mail.template">
+            <field name="name">Training Payment: Confirmed</field>
+            <field name="model_id" ref="model_training_payment"/>
+            <field name="subject">Payment confirmed: {{ object.name }}</field>
+            <field name="email_from">{{ user.email_formatted or '' }}</field>
+            <field name="email_to">{{ object.student_id.email or '' }}</field>
+            <field name="description">Sent automatically when a payment is posted.</field>
+            <field name="body_html" type="html">
+<div style="margin: 0; padding: 0;">
+    <p style="margin: 0; padding: 0; font-size: 13px;">
+        Dear <t t-out="object.student_id.name or ''">Student</t>,
+        <br/><br/>
+        We have confirmed your payment for <strong t-out="object.course_id.name or ''">Course</strong>.
+        <br/><br/>
+        Receipt number: <strong t-out="object.name or ''">Receipt</strong>
+        <br/>
+        Amount: <strong t-out="object.amount or 0.0">0.00</strong>
+        <br/>
+        Payment method: <strong t-out="object.payment_method or ''">Method</strong>
+        <br/><br/>
+        Best regards,<br/>
+        <t t-out="user.company_id.name or ''">Training Academy</t>
+    </p>
+</div>
+            </field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+
+        <record id="email_template_certificate_generated" model="mail.template">
+            <field name="name">Training Certificate: Generated</field>
+            <field name="model_id" ref="model_training_enrollment"/>
+            <field name="subject">Certificate ready: {{ object.course_id.name }}</field>
+            <field name="email_from">{{ user.email_formatted or '' }}</field>
+            <field name="email_to">{{ object.student_id.email or '' }}</field>
+            <field name="description">Sent automatically when a certificate is generated.</field>
+            <field name="body_html" type="html">
+<div style="margin: 0; padding: 0;">
+    <p style="margin: 0; padding: 0; font-size: 13px;">
+        Dear <t t-out="object.student_id.name or ''">Student</t>,
+        <br/><br/>
+        Your certificate for <strong t-out="object.course_id.name or ''">Course</strong> is ready.
+        <br/><br/>
+        Certificate number: <strong t-out="object.certificate_number or ''">Certificate</strong>
+        <br/>
+        Completion date: <strong t-out="object.completion_date or ''">Date</strong>
+        <br/><br/>
+        Best regards,<br/>
+        <t t-out="user.company_id.name or ''">Training Academy</t>
+    </p>
+</div>
+            </field>
+            <field name="report_template_ids" eval="[(4, ref('action_report_training_certificate'))]"/>
+            <field name="auto_delete" eval="True"/>
+        </record>
+
+        <record id="email_template_attendance_warning" model="mail.template">
+            <field name="name">Training Attendance: Below 80% Warning</field>
+            <field name="model_id" ref="model_training_enrollment"/>
+            <field name="subject">Attendance warning: {{ object.course_id.name }}</field>
+            <field name="email_from">{{ user.email_formatted or '' }}</field>
+            <field name="email_to">{{ object.student_id.email or '' }}</field>
+            <field name="description">Sent automatically when attendance falls below 80%.</field>
+            <field name="body_html" type="html">
+<div style="margin: 0; padding: 0;">
+    <p style="margin: 0; padding: 0; font-size: 13px;">
+        Dear <t t-out="object.student_id.name or ''">Student</t>,
+        <br/><br/>
+        Your attendance for <strong t-out="object.course_id.name or ''">Course</strong> is currently below the required 80%.
+        <br/><br/>
+        Current attendance: <strong><t t-out="object.attendance_percentage or 0.0"/>%</strong>
+        <br/>
+        Present sessions: <strong t-out="object.present_sessions or 0">0</strong>
+        <br/>
+        Total sessions: <strong t-out="object.total_sessions or 0">0</strong>
+        <br/><br/>
+        Please attend the upcoming sessions to remain eligible for certification.
+        <br/><br/>
+        Best regards,<br/>
+        <t t-out="user.company_id.name or ''">Training Academy</t>
+    </p>
+</div>
+            </field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+    </data>
+</odoo>

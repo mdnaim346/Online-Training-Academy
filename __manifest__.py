@@ -18,6 +18,7 @@
         "reports/payment_receipt_template.xml",
         "reports/certificate_report.xml",
         "reports/report_action.xml",
+        "data/email_templates.xml",
         "views/training_course.xml",
         "views/training_trainer_views.xml",
         "views/training_attendance_views.xml",

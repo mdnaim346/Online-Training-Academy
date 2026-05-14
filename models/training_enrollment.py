@@ -95,6 +95,11 @@ class TrainingEnrollment(models.Model):
         string="Attendance Lines",
     )
 
+    attendance_warning_sent = fields.Boolean(
+        string="Attendance Warning Sent",
+        copy=False,
+    )
+
     payment_ids = fields.One2many(
         "training.payment",
         "enrollment_id",
@@ -183,6 +188,9 @@ class TrainingEnrollment(models.Model):
             )
 
             rec._create_approval_activity()
+            rec._send_notification_template(
+                "Training_academy_management_system.email_template_enrollment_submitted"
+            )
 
     def action_approve(self):
         for rec in self:
@@ -207,6 +215,9 @@ class TrainingEnrollment(models.Model):
             )
 
             rec._mark_approval_activities_done()
+            rec._send_notification_template(
+                "Training_academy_management_system.email_template_enrollment_approved"
+            )
 
     def action_mark_paid(self):
         for rec in self:
@@ -240,6 +251,9 @@ class TrainingEnrollment(models.Model):
                     Certificate generated:
                     <b>{rec.certificate_number}</b>
                 """
+            )
+            rec._send_notification_template(
+                "Training_academy_management_system.email_template_certificate_generated"
             )
 
     def action_open_payments(self):
@@ -350,3 +364,34 @@ class TrainingEnrollment(models.Model):
                 "res_model_id": self.env["ir.model"]._get_id("training.enrollment"),
                 "date_deadline": fields.Date.today(),
             })
+
+    def _send_notification_template(self, template_xmlid):
+        template = self.env.ref(template_xmlid, raise_if_not_found=False)
+        if not template:
+            return
+
+        for rec in self:
+            if not rec.student_id.email:
+                continue
+
+            rec.with_context(force_send=True).message_post_with_source(
+                template,
+                email_layout_xmlid="mail.mail_notification_light",
+                subtype_xmlid="mail.mt_comment",
+            )
+
+    def _send_attendance_warning_if_needed(self):
+        for rec in self:
+            if rec.total_sessions <= 0 or rec.state not in ("confirmed", "paid"):
+                continue
+
+            if rec.attendance_percentage < 80:
+                if rec.attendance_warning_sent:
+                    continue
+
+                rec._send_notification_template(
+                    "Training_academy_management_system.email_template_attendance_warning"
+                )
+                rec.attendance_warning_sent = True
+            elif rec.attendance_warning_sent:
+                rec.attendance_warning_sent = False

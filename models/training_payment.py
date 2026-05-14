@@ -83,6 +83,11 @@ class TrainingPayment(models.Model):
         tracking=True,
     )
 
+    payment_notification_sent = fields.Boolean(
+        string="Payment Notification Sent",
+        copy=False,
+    )
+
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
@@ -93,11 +98,14 @@ class TrainingPayment(models.Model):
 
         payments = super().create(vals_list)
         payments._check_enrollment_overpayment()
+        payments.filtered(lambda payment: payment.state == "posted")._send_payment_confirmed_email()
         return payments
 
     def write(self, vals):
         result = super().write(vals)
         self._check_enrollment_overpayment()
+        if vals.get("state") == "posted":
+            self._send_payment_confirmed_email()
         return result
 
     @api.constrains("amount")
@@ -120,3 +128,22 @@ class TrainingPayment(models.Model):
     def action_set_posted(self):
         for rec in self:
             rec.state = "posted"
+
+    def _send_payment_confirmed_email(self):
+        template = self.env.ref(
+            "Training_academy_management_system.email_template_payment_confirmed",
+            raise_if_not_found=False,
+        )
+        if not template:
+            return
+
+        for rec in self:
+            if rec.payment_notification_sent or not rec.student_id.email:
+                continue
+
+            rec.with_context(force_send=True).message_post_with_source(
+                template,
+                email_layout_xmlid="mail.mail_notification_light",
+                subtype_xmlid="mail.mt_comment",
+            )
+            rec.payment_notification_sent = True

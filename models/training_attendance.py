@@ -67,7 +67,9 @@ class TrainingAttendanceSession(models.Model):
             if not rec.attendance_line_ids:
                 raise ValidationError("Please generate attendance lines first.")
             rec.state = "confirmed"
-            rec.attendance_line_ids.mapped("enrollment_id")._compute_attendance_percentage()
+            enrollments = rec.attendance_line_ids.mapped("enrollment_id")
+            enrollments._compute_attendance_percentage()
+            enrollments._send_attendance_warning_if_needed()
 
     def action_cancel(self):
         for rec in self:
@@ -133,7 +135,9 @@ class TrainingAttendanceLine(models.Model):
     def create(self, vals_list):
         lines = super().create(vals_list)
         lines._sync_enrollment()
-        lines.mapped("enrollment_id")._compute_attendance_percentage()
+        enrollments = lines.mapped("enrollment_id")
+        enrollments._compute_attendance_percentage()
+        enrollments._send_attendance_warning_if_needed()
         return lines
 
     def write(self, vals):
@@ -141,13 +145,16 @@ class TrainingAttendanceLine(models.Model):
         result = super().write(vals)
         if not self.env.context.get("skip_attendance_enrollment_sync"):
             self._sync_enrollment()
-        (enrollments | self.mapped("enrollment_id"))._compute_attendance_percentage()
+        enrollments = enrollments | self.mapped("enrollment_id")
+        enrollments._compute_attendance_percentage()
+        enrollments._send_attendance_warning_if_needed()
         return result
 
     def unlink(self):
         enrollments = self.mapped("enrollment_id")
         result = super().unlink()
         enrollments._compute_attendance_percentage()
+        enrollments._send_attendance_warning_if_needed()
         return result
 
     def _sync_enrollment(self):
