@@ -10,7 +10,8 @@
                     <p>Operational overview with manager analytics where your role allows it.</p>
                 </div>
 
-                <button class="btn btn-primary" t-on-click="refreshDashboard">
+                <button class="btn btn-primary training-dashboard-refresh" t-on-click="refreshDashboard">
+                    <i class="fa fa-refresh"/>
                     Refresh
                 </button>
             </div>
@@ -19,33 +20,39 @@
                 <h3>Operations</h3>
 
                 <div class="training-dashboard-grid">
-                    <button class="training-dashboard-kpi" t-on-click="openCourses">
-                        <span>Courses</span>
+                    <button class="training-dashboard-kpi training-dashboard-kpi--courses" t-on-click="openCourses">
+                        <span class="training-dashboard-kpi-icon"><i class="fa fa-book"/></span>
+                        <span class="training-dashboard-kpi-label">Courses</span>
                         <strong><t t-esc="state.totalCourses"/></strong>
                     </button>
 
-                    <button class="training-dashboard-kpi" t-on-click="openStudents">
-                        <span>Students</span>
+                    <button class="training-dashboard-kpi training-dashboard-kpi--students" t-on-click="openStudents">
+                        <span class="training-dashboard-kpi-icon"><i class="fa fa-users"/></span>
+                        <span class="training-dashboard-kpi-label">Students</span>
                         <strong><t t-esc="state.totalStudents"/></strong>
                     </button>
 
-                    <button class="training-dashboard-kpi" t-on-click="openEnrollments">
-                        <span>Enrollments</span>
+                    <button class="training-dashboard-kpi training-dashboard-kpi--enrollments" t-on-click="openEnrollments">
+                        <span class="training-dashboard-kpi-icon"><i class="fa fa-check-square-o"/></span>
+                        <span class="training-dashboard-kpi-label">Enrollments</span>
                         <strong><t t-esc="state.totalEnrollments"/></strong>
                     </button>
 
-                    <button class="training-dashboard-kpi" t-on-click="openAttendanceSessions">
-                        <span>Attendance Sessions</span>
+                    <button class="training-dashboard-kpi training-dashboard-kpi--attendance" t-on-click="openAttendanceSessions">
+                        <span class="training-dashboard-kpi-icon"><i class="fa fa-calendar-check-o"/></span>
+                        <span class="training-dashboard-kpi-label">Attendance Sessions</span>
                         <strong><t t-esc="state.attendanceSessions"/></strong>
                     </button>
 
-                    <button class="training-dashboard-kpi" t-on-click="openTodayActivities">
-                        <span>Today's Activities</span>
+                    <button class="training-dashboard-kpi training-dashboard-kpi--activities" t-on-click="openTodayActivities">
+                        <span class="training-dashboard-kpi-icon"><i class="fa fa-bell-o"/></span>
+                        <span class="training-dashboard-kpi-label">Today's Activities</span>
                         <strong><t t-esc="state.todayActivities"/></strong>
                     </button>
 
-                    <button class="training-dashboard-kpi" t-on-click="openTrainers">
-                        <span>Trainers</span>
+                    <button class="training-dashboard-kpi training-dashboard-kpi--trainers" t-on-click="openTrainers">
+                        <span class="training-dashboard-kpi-icon"><i class="fa fa-id-badge"/></span>
+                        <span class="training-dashboard-kpi-label">Trainers</span>
                         <strong><t t-esc="state.totalTrainers"/></strong>
                     </button>
                 </div>
@@ -55,33 +62,39 @@
                 <h3>Manager Analytics</h3>
 
                 <div class="training-dashboard-grid training-dashboard-manager-grid">
-                    <div class="training-dashboard-kpi">
-                        <span>Total Revenue</span>
+                    <div class="training-dashboard-kpi training-dashboard-kpi--revenue">
+                        <span class="training-dashboard-kpi-icon"><i class="fa fa-line-chart"/></span>
+                        <span class="training-dashboard-kpi-label">Total Revenue</span>
                         <strong><t t-esc="state.totalRevenue"/></strong>
                     </div>
 
-                    <button class="training-dashboard-kpi" t-on-click="openDuePayments">
-                        <span>Total Due</span>
+                    <button class="training-dashboard-kpi training-dashboard-kpi--due" t-on-click="openDuePayments">
+                        <span class="training-dashboard-kpi-icon"><i class="fa fa-credit-card"/></span>
+                        <span class="training-dashboard-kpi-label">Total Due</span>
                         <strong><t t-esc="state.totalDue"/></strong>
                     </button>
 
-                    <button class="training-dashboard-kpi" t-on-click="openWaitingApproval">
-                        <span>Waiting Approval</span>
+                    <button class="training-dashboard-kpi training-dashboard-kpi--approval" t-on-click="openWaitingApproval">
+                        <span class="training-dashboard-kpi-icon"><i class="fa fa-hourglass-half"/></span>
+                        <span class="training-dashboard-kpi-label">Waiting Approval</span>
                         <strong><t t-esc="state.waitingApproval"/></strong>
                     </button>
 
-                    <button class="training-dashboard-kpi" t-on-click="openPendingPayments">
-                        <span>Pending Payments</span>
+                    <button class="training-dashboard-kpi training-dashboard-kpi--pending" t-on-click="openPendingPayments">
+                        <span class="training-dashboard-kpi-icon"><i class="fa fa-money"/></span>
+                        <span class="training-dashboard-kpi-label">Pending Payments</span>
                         <strong><t t-esc="state.pendingPayments"/></strong>
                     </button>
 
-                    <button class="training-dashboard-kpi" t-on-click="openCertificates">
-                        <span>Certificates Issued</span>
+                    <button class="training-dashboard-kpi training-dashboard-kpi--certificates" t-on-click="openCertificates">
+                        <span class="training-dashboard-kpi-icon"><i class="fa fa-certificate"/></span>
+                        <span class="training-dashboard-kpi-label">Certificates Issued</span>
                         <strong><t t-esc="state.certificatesIssued"/></strong>
                     </button>
 
-                    <button class="training-dashboard-kpi" t-on-click="openAttendanceRisk">
-                        <span>Attendance Risk Students</span>
+                    <button class="training-dashboard-kpi training-dashboard-kpi--risk" t-on-click="openAttendanceRisk">
+                        <span class="training-dashboard-kpi-icon"><i class="fa fa-exclamation-triangle"/></span>
+                        <span class="training-dashboard-kpi-label">Attendance Risk Students</span>
                         <strong><t t-esc="state.attendanceRiskStudents"/></strong>
                     </button>
                 </div>

@@ -217,102 +217,136 @@
 
     <template id="website_training_enroll_form" name="Training Enrollment Form">
         <t t-call="website.layout">
-            <div class="container py-5">
+            <section class="training-form-section">
+                <div class="container">
+                    <div class="training-form-layout">
+                        <aside class="training-form-summary">
+                            <a t-att-href="'/training/course/%s' % course.id" class="training-back-link training-back-link--dark">
+                                <i class="fa fa-arrow-left"/>
+                                Course details
+                            </a>
+                            <span class="training-eyebrow">Enrollment request</span>
+                            <h1>Enroll in <t t-esc="course.name"/></h1>
+                            <p>Share your contact details and the academy team will review your request.</p>
 
-                <h1>Enroll in <t t-esc="course.name"/></h1>
+                            <div class="training-form-course-meta">
+                                <div>
+                                    <span>Fee</span>
+                                    <strong><t t-esc="'%.2f' % course.final_fee"/></strong>
+                                </div>
+                                <div>
+                                    <span>Seats</span>
+                                    <strong><t t-esc="course.available_seats"/></strong>
+                                </div>
+                                <div>
+                                    <span>Duration</span>
+                                    <strong><t t-esc="course.duration_days"/> days</strong>
+                                </div>
+                            </div>
+                        </aside>
 
-                <t t-if="error">
-                    <div class="alert alert-danger mt-3">
-                        <t t-esc="error"/>
+                        <div class="training-form-panel">
+                            <t t-if="error">
+                                <div class="alert alert-danger">
+                                    <t t-esc="error"/>
+                                </div>
+                            </t>
+
+                            <form t-att-action="'/training/course/%s/enroll/submit' % course.id"
+                                  method="post"
+                                  class="training-enrollment-form">
+
+                                <input type="hidden"
+                                       name="csrf_token"
+                                       t-att-value="request.csrf_token()"/>
+
+                                <div class="training-form-field">
+                                    <label class="form-label">Student Name</label>
+                                    <input type="text"
+                                           name="name"
+                                           class="form-control"
+                                           required="required"
+                                           placeholder="Your full name"/>
+                                </div>
+
+                                <div class="training-form-field">
+                                    <label class="form-label">Email</label>
+                                    <input type="email"
+                                           name="email"
+                                           class="form-control"
+                                           placeholder="name@example.com"/>
+                                </div>
+
+                                <div class="training-form-field">
+                                    <label class="form-label">Phone</label>
+                                    <input type="text"
+                                           name="phone"
+                                           class="form-control"
+                                           placeholder="Contact number"/>
+                                </div>
+
+                                <div class="training-form-field">
+                                    <label class="form-label">Address</label>
+                                    <textarea name="address"
+                                              class="form-control"
+                                              rows="4"
+                                              placeholder="Street, city, country"/>
+                                </div>
+
+                                <div class="training-form-actions">
+                                    <button type="submit"
+                                            class="btn training-enroll-primary">
+                                        Submit Enrollment
+                                    </button>
+
+                                    <a t-att-href="'/training/course/%s' % course.id"
+                                       class="btn training-enroll-secondary">
+                                        Cancel
+                                    </a>
+                                </div>
+
+                            </form>
+                        </div>
                     </div>
-                </t>
-
-                <form t-att-action="'/training/course/%s/enroll/submit' % course.id"
-                      method="post"
-                      class="mt-4">
-
-                    <input type="hidden"
-                           name="csrf_token"
-                           t-att-value="request.csrf_token()"/>
-
-                    <div class="mb-3">
-                        <label class="form-label">Student Name</label>
-                        <input type="text"
-                               name="name"
-                               class="form-control"
-                               required="required"/>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Email</label>
-                        <input type="email"
-                               name="email"
-                               class="form-control"/>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Phone</label>
-                        <input type="text"
-                               name="phone"
-                               class="form-control"/>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Address</label>
-                        <textarea name="address"
-                                  class="form-control"/>
-                    </div>
-
-                    <button type="submit"
-                            class="btn btn-success">
-                        Submit Enrollment
-                    </button>
-
-                    <a t-att-href="'/training/course/%s' % course.id"
-                       class="btn btn-light">
-                        Cancel
-                    </a>
-
-                </form>
-
-            </div>
+                </div>
+            </section>
         </t>
     </template>
 
     <template id="website_training_enroll_success" name="Training Enrollment Success">
         <t t-call="website.layout">
-            <div class="container py-5 text-center">
+            <section class="training-success-section">
+                <div class="container">
+                    <div class="training-success-panel">
+                        <div class="training-success-icon">
+                            <i class="fa fa-check"/>
+                        </div>
+                        <span class="training-eyebrow">Request received</span>
+                        <h1>Enrollment Submitted Successfully</h1>
+                        <p>Your enrollment request has been submitted for approval.</p>
 
-                <div class="alert alert-success">
-                    <h2>Enrollment Submitted Successfully!</h2>
-                    <p>
-                        Your enrollment request has been submitted for approval.
-                    </p>
+                        <div class="training-success-details">
+                            <div>
+                                <span>Student</span>
+                                <strong><t t-esc="student.name"/></strong>
+                            </div>
+                            <div>
+                                <span>Course</span>
+                                <strong><t t-esc="course.name"/></strong>
+                            </div>
+                            <div>
+                                <span>Status</span>
+                                <strong><t t-esc="enrollment.state"/></strong>
+                            </div>
+                        </div>
+
+                        <a href="/training/courses"
+                           class="btn training-enroll-primary">
+                            Back to Courses
+                        </a>
+                    </div>
                 </div>
-
-                <h4>
-                    Student:
-                    <t t-esc="student.name"/>
-                </h4>
-
-                <h4>
-                    Course:
-                    <t t-esc="course.name"/>
-                </h4>
-
-                <p>
-                    Enrollment Status:
-                    <strong>
-                        <t t-esc="enrollment.state"/>
-                    </strong>
-                </p>
-
-                <a href="/training/courses"
-                   class="btn btn-primary mt-3">
-                    Back to Courses
-                </a>
-
-            </div>
+            </section>
         </t>
     </template>
 

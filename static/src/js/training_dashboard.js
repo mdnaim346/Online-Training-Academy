@@ -110,15 +110,31 @@ class TrainingDashboard extends Component {
                                 this.state.totalRevenue,
                                 this.state.totalDue,
                             ],
+                            backgroundColor: ["#2d8659", "#b84a62"],
+                            borderRadius: 8,
+                            borderSkipped: false,
                         },
                     ],
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false,
+                            },
+                        },
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: "rgba(82, 96, 109, 0.14)",
+                            },
+                        },
+                    },
                     plugins: {
                         legend: {
-                            display: true,
+                            display: false,
                         },
                     },
                 },
@@ -145,6 +161,16 @@ class TrainingDashboard extends Component {
                             this.state.paidEnrollments,
                             this.state.cancelledEnrollments,
                         ],
+                        backgroundColor: [
+                            "#94a3b8",
+                            "#ba6b18",
+                            "#4e6a9e",
+                            "#2d8659",
+                            "#b84a62",
+                        ],
+                        borderColor: "#ffffff",
+                        borderWidth: 3,
+                        hoverOffset: 8,
                     },
                 ],
             },
