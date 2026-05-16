@@ -111,6 +111,24 @@ class TrainingEnrollment(models.Model):
         compute="_compute_payment_count",
     )
 
+    online_transaction_ids = fields.One2many(
+        "training.payment.transaction",
+        "enrollment_id",
+        string="Online Transactions",
+    )
+
+    latest_online_transaction_state = fields.Selection(
+        [
+            ("draft", "Draft"),
+            ("pending", "Pending"),
+            ("success", "Success"),
+            ("failed", "Failed"),
+            ("cancelled", "Cancelled"),
+        ],
+        string="Latest Online Payment Status",
+        compute="_compute_latest_online_transaction_state",
+    )
+
     @api.depends(
         "attendance_line_ids.status",
         "attendance_line_ids.session_id.state",
@@ -156,6 +174,12 @@ class TrainingEnrollment(models.Model):
     def _compute_payment_count(self):
         for rec in self:
             rec.payment_count = len(rec.payment_ids)
+
+    @api.depends("online_transaction_ids.state")
+    def _compute_latest_online_transaction_state(self):
+        for rec in self:
+            transaction = rec.online_transaction_ids[:1]
+            rec.latest_online_transaction_state = transaction.state if transaction else False
 
     @api.constrains("paid_amount")
     def _check_paid_amount(self):
@@ -255,6 +279,53 @@ class TrainingEnrollment(models.Model):
             rec._send_notification_template(
                 "Training_academy_management_system.email_template_certificate_generated"
             )
+
+    def _finalize_paid_enrollment_if_ready(self):
+        for rec in self:
+            if rec.state != "confirmed" or rec.paid_amount < rec.course_fee:
+                continue
+
+            rec.state = "paid"
+            rec.completion_date = fields.Date.today()
+
+            if (
+                not rec.certificate_number
+                and (rec.total_sessions == 0 or rec.attendance_percentage >= 80)
+            ):
+                rec.certificate_number = self.env["ir.sequence"].next_by_code(
+                    "training.certificate"
+                )
+                rec._send_notification_template(
+                    "Training_academy_management_system.email_template_certificate_generated"
+                )
+
+            rec.message_post(
+                body=f"""
+                    Online payment completed.<br/>
+                    Paid amount: <b>{rec.paid_amount}</b>
+                """
+            )
+
+    def action_create_stripe_checkout(self):
+        self.ensure_one()
+
+        if self.state != "confirmed":
+            raise ValidationError("Only confirmed enrollments can be paid online.")
+
+        if self.due_amount <= 0:
+            raise ValidationError("This enrollment has no due amount.")
+
+        transaction = self.env["training.payment.transaction"].create({
+            "enrollment_id": self.id,
+            "amount": self.due_amount,
+        })
+        checkout_url = transaction.action_create_stripe_checkout_session()
+
+        return {
+            "type": "ir.actions.act_url",
+            "url": checkout_url,
+            "target": "self",
+        }
 
     def action_open_payments(self):
         self.ensure_one()

@@ -4,4 +4,6 @@ from . import training_enrollment
 from . import trainer
 from . import training_attendance
 from . import training_payment
+from . import training_payment_transaction
 from . import training_dashboard_service
+from . import res_config_settings

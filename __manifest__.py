@@ -25,7 +25,9 @@
         "views/training_student_views.xml",
         "views/training_enrollment_views.xml",
         "views/training_payment_views.xml",
+        "views/training_payment_transaction_views.xml",
         "views/training_dashboard_menu.xml",
+        "views/res_config_settings_views.xml",
         "views/website_traning_templates.xml",
         "views/portal_training_templates.xml",
 

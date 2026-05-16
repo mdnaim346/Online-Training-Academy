@@ -12,4 +12,11 @@
         <field name="prefix">PAY/</field>
         <field name="padding">5</field>
     </record>
+
+    <record id="seq_training_payment_transaction" model="ir.sequence">
+        <field name="name">Training Payment Transaction</field>
+        <field name="code">training.payment.transaction</field>
+        <field name="prefix">TXN/</field>
+        <field name="padding">5</field>
+    </record>
 </odoo>

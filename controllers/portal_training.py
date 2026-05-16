@@ -19,15 +19,23 @@ class TrainingPortal(CustomerPortal):
             ("partner_id", "=", partner.id)
         ], limit=1)
 
-        enrollments = request.env[
-            "training.enrollment"
-        ].sudo().search([
-            ("student_id", "=", student.id)
+        enrollments = request.env["training.enrollment"].sudo()
+        if student:
+            enrollments = enrollments.search([
+                ("student_id", "=", student.id)
+            ])
+        else:
+            enrollments = enrollments.browse()
+
+        available_courses = request.env["training.course"].sudo().search([
+            ("state", "=", "confirmed"),
+            ("available_seats", ">", 0),
         ])
 
         values = {
             "student": student,
             "enrollments": enrollments,
+            "available_courses": available_courses,
             "page_name": "training",
         }
 
@@ -69,6 +77,8 @@ class TrainingPortal(CustomerPortal):
         values = {
             "enrollment": enrollment,
             "page_name": "training_detail",
+            "payment_success": False,
+            "payment_error": False,
         }
 
         return request.render(

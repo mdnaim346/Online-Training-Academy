@@ -41,7 +41,7 @@
                     <div class="training-empty-state">
                         <i class="fa fa-folder-open-o"/>
                         <h2>No enrollments found</h2>
-                        <p>Your approved and requested courses will appear here.</p>
+                        <p>Your requested and enrolled courses will appear here.</p>
                     </div>
 
                 </t>
@@ -86,7 +86,14 @@
 
                                     <td>
 
-                                        <a t-att-href="'/my/training/enrollment/%s' % enrollment.id"
+                                        <a t-if="enrollment.state == 'confirmed' and enrollment.due_amount &gt; 0"
+                                           t-att-href="'/my/training/enrollment/%s/pay' % enrollment.id"
+                                           class="btn training-portal-action">
+                                            Pay Now
+                                        </a>
+
+                                        <a t-else=""
+                                           t-att-href="'/my/training/enrollment/%s' % enrollment.id"
                                            class="btn training-portal-action">
 
                                             View
@@ -103,6 +110,84 @@
                     </div>
 
                 </t>
+
+                <section class="training-portal-course-section">
+                    <div class="training-portal-section-heading">
+                        <span class="training-eyebrow">Available courses</span>
+                        <h3>Approved Courses Open for Enrollment</h3>
+                    </div>
+
+                    <t t-if="available_courses">
+                        <div class="training-course-grid">
+                            <t t-foreach="available_courses" t-as="course">
+                                <article class="training-course-card">
+                                    <div class="training-course-card__top">
+                                        <div class="training-course-icon">
+                                            <i class="fa fa-graduation-cap"/>
+                                        </div>
+                                        <span class="training-course-code">
+                                            <t t-esc="course.code or 'Course'"/>
+                                        </span>
+                                    </div>
+
+                                    <h2>
+                                        <t t-esc="course.name"/>
+                                    </h2>
+
+                                    <p class="training-course-trainer">
+                                        <i class="fa fa-user-o"/>
+                                        <span>
+                                            <t t-esc="course.trainer_id.name or 'Trainer not assigned'"/>
+                                        </span>
+                                    </p>
+
+                                    <div class="training-course-meta">
+                                        <div>
+                                            <span>Fee</span>
+                                            <strong>
+                                                <t t-esc="'%.2f' % course.final_fee"/>
+                                            </strong>
+                                        </div>
+                                        <div>
+                                            <span>Seats</span>
+                                            <strong>
+                                                <t t-esc="course.available_seats"/>
+                                            </strong>
+                                        </div>
+                                        <div>
+                                            <span>Duration</span>
+                                            <strong>
+                                                <t t-esc="course.duration_days"/> days
+                                            </strong>
+                                        </div>
+                                    </div>
+
+                                    <div class="training-course-footer">
+                                        <span class="training-course-date">
+                                            <i class="fa fa-calendar-o"/>
+                                            <t t-if="course.start_date">
+                                                <t t-esc="course.start_date"/>
+                                            </t>
+                                            <t t-else="">Date pending</t>
+                                        </span>
+                                        <a t-att-href="'/training/course/%s' % course.id"
+                                           class="btn training-course-action">
+                                            View Details
+                                        </a>
+                                    </div>
+                                </article>
+                            </t>
+                        </div>
+                    </t>
+
+                    <t t-else="">
+                        <div class="training-empty-state">
+                            <i class="fa fa-calendar-check-o"/>
+                            <h2>No approved courses are open</h2>
+                            <p>Confirmed courses with available seats will appear here.</p>
+                        </div>
+                    </t>
+                </section>
 
             </div>
 
@@ -128,6 +213,18 @@
                         Back to Enrollments
                     </a>
                 </div>
+
+                <t t-if="payment_success">
+                    <div class="alert alert-success">
+                        <t t-esc="payment_success"/>
+                    </div>
+                </t>
+
+                <t t-if="payment_error">
+                    <div class="alert alert-warning">
+                        <t t-esc="payment_error"/>
+                    </div>
+                </t>
 
                 <div class="training-portal-detail">
                     <div class="training-portal-detail__item">
@@ -161,9 +258,18 @@
                     </div>
 
                     <div class="training-portal-detail__item training-portal-detail__item--wide"
+                         t-if="enrollment.state == 'confirmed' and enrollment.due_amount &gt; 0">
+                        <span>Online Payment</span>
+                        <a t-att-href="'/my/training/enrollment/%s/pay' % enrollment.id"
+                           class="btn training-enroll-primary">
+                            Pay Now
+                        </a>
+                    </div>
+
+                    <div class="training-portal-detail__item training-portal-detail__item--wide"
                          t-if="enrollment.certificate_number">
                         <span>Certificate</span>
-                        <a t-att-href="'/report/pdf/training_academy.action_report_training_certificate/%s' % enrollment.id"
+                        <a t-att-href="'/report/pdf/Training_academy_management_system.report_training_certificate/%s' % enrollment.id"
                            class="btn training-enroll-primary"
                            target="_blank">
                             Download Certificate

@@ -681,6 +681,21 @@
     margin: 0;
 }
 
+.training-portal-course-section {
+    margin-top: 34px;
+}
+
+.training-portal-section-heading {
+    margin-bottom: 18px;
+}
+
+.training-portal-section-heading h3 {
+    color: #172033;
+    font-size: 1.45rem;
+    font-weight: 800;
+    margin: 0;
+}
+
 .training-portal-table-wrap,
 .training-portal-detail {
     background: #fff;

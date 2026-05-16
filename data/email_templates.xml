@@ -22,6 +22,7 @@
     </p>
 </div>
             </field>
+            <field name="report_template_ids" eval="[(4, ref('action_report_training_payment'))]"/>
             <field name="auto_delete" eval="True"/>
         </record>
 
