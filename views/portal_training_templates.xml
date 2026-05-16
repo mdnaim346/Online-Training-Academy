@@ -24,73 +24,83 @@
 
         <t t-call="portal.portal_layout">
 
-            <div class="container py-4">
+            <div class="container py-4 training-portal-page">
 
-                <h2 class="mb-4">
-                    My Training Enrollments
-                </h2>
+                <div class="training-portal-header">
+                    <div>
+                        <span class="training-eyebrow">Learning portal</span>
+                        <h2>My Training Enrollments</h2>
+                    </div>
+                    <a href="/training/courses" class="btn training-enroll-secondary">
+                        Browse Courses
+                    </a>
+                </div>
 
                 <t t-if="not enrollments">
 
-                    <div class="alert alert-info">
-                        No enrollments found.
+                    <div class="training-empty-state">
+                        <i class="fa fa-folder-open-o"/>
+                        <h2>No enrollments found</h2>
+                        <p>Your approved and requested courses will appear here.</p>
                     </div>
 
                 </t>
 
                 <t t-if="enrollments">
 
-                    <table class="table table-bordered">
+                    <div class="training-portal-table-wrap">
+                        <table class="table training-portal-table">
 
-                        <thead>
-                            <tr>
-                                <th>Course</th>
-                                <th>Status</th>
-                                <th>Paid</th>
-                                <th>Due</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
+                            <thead>
+                                <tr>
+                                    <th>Course</th>
+                                    <th>Status</th>
+                                    <th>Paid</th>
+                                    <th>Due</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
 
-                        <tbody>
+                            <tbody>
 
-                            <tr t-foreach="enrollments"
-                                t-as="enrollment">
+                                <tr t-foreach="enrollments"
+                                    t-as="enrollment">
 
-                                <td>
-                                    <t t-esc="enrollment.course_id.name"/>
-                                </td>
+                                    <td class="training-portal-table__course">
+                                        <t t-esc="enrollment.course_id.name"/>
+                                    </td>
 
-                                <td>
-                                    <span class="badge bg-primary">
-                                        <t t-esc="enrollment.state"/>
-                                    </span>
-                                </td>
+                                    <td>
+                                        <span class="training-portal-status">
+                                            <t t-esc="enrollment.state"/>
+                                        </span>
+                                    </td>
 
-                                <td>
-                                    <t t-esc="enrollment.paid_amount"/>
-                                </td>
+                                    <td>
+                                        <t t-esc="enrollment.paid_amount"/>
+                                    </td>
 
-                                <td>
-                                    <t t-esc="enrollment.due_amount"/>
-                                </td>
+                                    <td>
+                                        <t t-esc="enrollment.due_amount"/>
+                                    </td>
 
-                                <td>
+                                    <td>
 
-                                    <a t-att-href="'/my/training/enrollment/%s' % enrollment.id"
-                                       class="btn btn-sm btn-primary">
+                                        <a t-att-href="'/my/training/enrollment/%s' % enrollment.id"
+                                           class="btn training-portal-action">
 
-                                        View
+                                            View
 
-                                    </a>
+                                        </a>
 
-                                </td>
+                                    </td>
 
-                            </tr>
+                                </tr>
 
-                        </tbody>
+                            </tbody>
 
-                    </table>
+                        </table>
+                    </div>
 
                 </t>
 
@@ -105,112 +115,60 @@
 
         <t t-call="portal.portal_layout">
 
-            <div class="container py-4">
+            <div class="container py-4 training-portal-page">
 
-                <h2 class="mb-4">
-                    Enrollment Detail
-                </h2>
+                <div class="training-portal-header">
+                    <div>
+                        <span class="training-eyebrow">Enrollment detail</span>
+                        <h2>
+                            <t t-esc="enrollment.course_id.name"/>
+                        </h2>
+                    </div>
+                    <a href="/my/training" class="btn training-enroll-secondary">
+                        Back to Enrollments
+                    </a>
+                </div>
 
-                <div class="card shadow-sm">
-
-                    <div class="card-body">
-
-                        <table class="table table-bordered">
-
-                            <tr>
-                                <th width="30%">
-                                    Course
-                                </th>
-
-                                <td>
-                                    <t t-esc="enrollment.course_id.name"/>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <th>
-                                    Trainer
-                                </th>
-
-                                <td>
-                                    <t t-esc="enrollment.course_id.trainer_id.name"/>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <th>
-                                    Enrollment Date
-                                </th>
-
-                                <td>
-                                    <t t-esc="enrollment.enrollment_date"/>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <th>
-                                    State
-                                </th>
-
-                                <td>
-                                    <span class="badge bg-success">
-                                        <t t-esc="enrollment.state"/>
-                                    </span>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <th>
-                                    Course Fee
-                                </th>
-
-                                <td>
-                                    <t t-esc="enrollment.course_fee"/>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <th>
-                                    Paid Amount
-                                </th>
-
-                                <td>
-                                    <t t-esc="enrollment.paid_amount"/>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <th>
-                                    Due Amount
-                                </th>
-
-                                <td>
-                                    <t t-esc="enrollment.due_amount"/>
-                                </td>
-                            </tr>
-
-                            <tr t-if="enrollment.certificate_number">
-                                <th>
-                                    Certificate
-                                </th>
-
-                                <td>
-
-                                    <a t-att-href="'/report/pdf/training_academy.action_report_training_certificate/%s' % enrollment.id"
-                                       class="btn btn-success btn-sm"
-                                       target="_blank">
-
-                                        Download Certificate
-
-                                    </a>
-
-                                </td>
-                            </tr>
-
-                        </table>
-
+                <div class="training-portal-detail">
+                    <div class="training-portal-detail__item">
+                        <span>Trainer</span>
+                        <strong><t t-esc="enrollment.course_id.trainer_id.name"/></strong>
                     </div>
 
+                    <div class="training-portal-detail__item">
+                        <span>Enrollment Date</span>
+                        <strong><t t-esc="enrollment.enrollment_date"/></strong>
+                    </div>
+
+                    <div class="training-portal-detail__item">
+                        <span>Status</span>
+                        <strong><span class="training-portal-status"><t t-esc="enrollment.state"/></span></strong>
+                    </div>
+
+                    <div class="training-portal-detail__item">
+                        <span>Course Fee</span>
+                        <strong><t t-esc="enrollment.course_fee"/></strong>
+                    </div>
+
+                    <div class="training-portal-detail__item">
+                        <span>Paid Amount</span>
+                        <strong><t t-esc="enrollment.paid_amount"/></strong>
+                    </div>
+
+                    <div class="training-portal-detail__item">
+                        <span>Due Amount</span>
+                        <strong><t t-esc="enrollment.due_amount"/></strong>
+                    </div>
+
+                    <div class="training-portal-detail__item training-portal-detail__item--wide"
+                         t-if="enrollment.certificate_number">
+                        <span>Certificate</span>
+                        <a t-att-href="'/report/pdf/training_academy.action_report_training_certificate/%s' % enrollment.id"
+                           class="btn training-enroll-primary"
+                           target="_blank">
+                            Download Certificate
+                        </a>
+                    </div>
                 </div>
 
             </div>

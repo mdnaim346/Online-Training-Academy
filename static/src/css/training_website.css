@@ -661,6 +661,133 @@
     max-width: 220px;
 }
 
+.training-portal-page {
+    color: #172033;
+}
+
+.training-portal-header {
+    align-items: flex-end;
+    display: flex;
+    gap: 18px;
+    justify-content: space-between;
+    margin-bottom: 24px;
+}
+
+.training-portal-header h2 {
+    color: #172033;
+    font-size: clamp(1.9rem, 3vw, 2.8rem);
+    font-weight: 800;
+    line-height: 1.08;
+    margin: 0;
+}
+
+.training-portal-table-wrap,
+.training-portal-detail {
+    background: #fff;
+    border: 1px solid #e3e8ef;
+    border-radius: 8px;
+    box-shadow: 0 16px 34px rgba(15, 23, 42, 0.08);
+    overflow: hidden;
+}
+
+.training-portal-table {
+    margin: 0;
+}
+
+.training-portal-table thead th {
+    background: #edf6f3;
+    border-bottom: 1px solid #dbe7e4;
+    color: #24415f;
+    font-size: 0.78rem;
+    font-weight: 800;
+    padding: 14px 16px;
+    text-transform: uppercase;
+}
+
+.training-portal-table tbody td {
+    border-color: #edf1f5;
+    color: #52606d;
+    padding: 16px;
+    vertical-align: middle;
+}
+
+.training-portal-table tbody tr:hover {
+    background: #fbfdfc;
+}
+
+.training-portal-table__course {
+    color: #172033 !important;
+    font-weight: 800;
+}
+
+.training-portal-status {
+    background: #e9f4f2;
+    border-radius: 999px;
+    color: #246b73;
+    display: inline-flex;
+    font-size: 0.78rem;
+    font-weight: 800;
+    line-height: 1.2;
+    padding: 6px 10px;
+    text-transform: capitalize;
+}
+
+.training-portal-action {
+    background: #246b73;
+    border: 0;
+    border-radius: 6px;
+    color: #fff;
+    font-weight: 800;
+    padding: 8px 14px;
+}
+
+.training-portal-action:hover,
+.training-portal-action:focus {
+    background: #1d5960;
+    color: #fff;
+}
+
+.training-portal-detail {
+    display: grid;
+    gap: 0;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.training-portal-detail__item {
+    border-bottom: 1px solid #edf1f5;
+    border-right: 1px solid #edf1f5;
+    min-height: 116px;
+    padding: 22px;
+}
+
+.training-portal-detail__item:nth-child(3n),
+.training-portal-detail__item:last-child {
+    border-right: 0;
+}
+
+.training-portal-detail__item--wide {
+    align-items: center;
+    display: flex;
+    grid-column: 1 / -1;
+    justify-content: space-between;
+    min-height: 92px;
+}
+
+.training-portal-detail__item > span {
+    color: #758195;
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 800;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+
+.training-portal-detail__item > strong {
+    color: #172033;
+    display: block;
+    font-size: 1.04rem;
+}
+
 @media (max-width: 767.98px) {
     .training-catalog-hero {
         padding: 46px 0 34px;
@@ -759,5 +886,33 @@
 
     .training-form-actions {
         grid-template-columns: 1fr;
+    }
+
+    .training-portal-header {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .training-portal-table-wrap {
+        overflow-x: auto;
+    }
+
+    .training-portal-table {
+        min-width: 640px;
+    }
+
+    .training-portal-detail {
+        grid-template-columns: 1fr;
+    }
+
+    .training-portal-detail__item,
+    .training-portal-detail__item:nth-child(3n) {
+        border-right: 0;
+    }
+
+    .training-portal-detail__item--wide {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 14px;
     }
 }

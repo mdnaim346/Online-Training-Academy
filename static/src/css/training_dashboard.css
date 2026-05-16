@@ -52,6 +52,12 @@
     background: #1d5960;
 }
 
+.training-dashboard-refresh:focus-visible,
+button.training-dashboard-kpi:focus-visible {
+    outline: 3px solid rgba(36, 107, 115, 0.24);
+    outline-offset: 3px;
+}
+
 .training-dashboard-section {
     margin-bottom: 26px;
 }
@@ -125,6 +131,7 @@ button.training-dashboard-kpi:hover {
     color: #52606d;
     font-size: 13px;
     font-weight: 700;
+    line-height: 1.25;
     text-transform: uppercase;
 }
 
@@ -174,7 +181,7 @@ button.training-dashboard-kpi:hover {
 
 .training-dashboard-chart-row {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
     gap: 14px;
 }
 
@@ -240,6 +247,15 @@ button.training-dashboard-kpi:hover {
         align-items: flex-start;
         flex-direction: column;
         padding: 18px;
+    }
+
+    .training-dashboard-chart-panel {
+        min-height: 300px;
+        padding: 14px;
+    }
+
+    .training-dashboard-chart-area {
+        height: 230px;
     }
 
     .training-dashboard-refresh {
