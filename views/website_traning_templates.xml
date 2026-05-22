@@ -180,8 +180,24 @@
                             <div class="training-enroll-panel__icon">
                                 <i class="fa fa-check"/>
                             </div>
-                            <h2>Enroll Now</h2>
-                            <p>Submit your information to reserve a seat in this course.</p>
+                            <h2>
+                                <t t-if="course_enrollment and course_enrollment.state == 'confirmed' and course_enrollment.due_amount &gt; 0">
+                                    Payment Due
+                                </t>
+                                <t t-elif="course_enrollment">
+                                    Enrollment Found
+                                </t>
+                                <t t-else="">Enroll Now</t>
+                            </h2>
+                            <p>
+                                <t t-if="course_enrollment and course_enrollment.state == 'confirmed' and course_enrollment.due_amount &gt; 0">
+                                    Complete your payment to finish this enrollment.
+                                </t>
+                                <t t-elif="course_enrollment">
+                                    You already have an enrollment for this course.
+                                </t>
+                                <t t-else="">Submit your information to reserve a seat in this course.</t>
+                            </p>
 
                             <div class="training-enroll-summary">
                                 <div>
@@ -198,7 +214,20 @@
                                 </div>
                             </div>
 
-                            <a t-att-href="'/training/course/%s/enroll' % course.id"
+                            <a t-if="course_enrollment and course_enrollment.state == 'confirmed' and course_enrollment.due_amount &gt; 0"
+                               t-att-href="'/my/training/enrollment/%s/pay' % course_enrollment.id"
+                               class="btn training-enroll-primary">
+                                Pay Now
+                            </a>
+
+                            <a t-elif="course_enrollment"
+                               t-att-href="'/my/training/enrollment/%s' % course_enrollment.id"
+                               class="btn training-enroll-primary">
+                                View Enrollment
+                            </a>
+
+                            <a t-else=""
+                               t-att-href="'/training/course/%s/enroll' % course.id"
                                class="btn training-enroll-primary">
                                 Enroll Now
                             </a>

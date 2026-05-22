@@ -37,7 +37,7 @@ class TrainingStripePayment(http.Controller):
                 },
             )
 
-        return request.redirect(action["url"])
+        return request.redirect(action["url"], local=False)
 
     @http.route(
         "/my/training/payment/success",
@@ -137,10 +137,12 @@ class TrainingStripePayment(http.Controller):
 
     def _is_portal_enrollment(self, enrollment):
         partner = request.env.user.partner_id
-        student = request.env["training.student"].sudo().search([
-            ("partner_id", "=", partner.id),
-        ], limit=1)
-        return enrollment.student_id.id == student.id
+        emails = [email for email in {partner.email, request.env.user.login} if email]
+        domain = [("partner_id", "=", partner.id)]
+        if emails:
+            domain = ["|", ("partner_id", "=", partner.id), ("email", "in", emails)]
+        students = request.env["training.student"].sudo().search(domain)
+        return enrollment.student_id in students
 
     def _verify_stripe_signature(self, payload, signature, webhook_secret):
         timestamp = None

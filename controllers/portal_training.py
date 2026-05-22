@@ -5,6 +5,14 @@ from odoo.addons.portal.controllers.portal import CustomerPortal
 
 class TrainingPortal(CustomerPortal):
 
+    def _get_current_portal_students(self):
+        partner = request.env.user.partner_id
+        emails = [email for email in {partner.email, request.env.user.login} if email]
+        domain = [("partner_id", "=", partner.id)]
+        if emails:
+            domain = ["|", ("partner_id", "=", partner.id), ("email", "in", emails)]
+        return request.env["training.student"].sudo().search(domain)
+
     @http.route(
         ["/my/training"],
         type="http",
@@ -13,16 +21,13 @@ class TrainingPortal(CustomerPortal):
     )
     def portal_my_training(self, **kwargs):
 
-        partner = request.env.user.partner_id
-
-        student = request.env["training.student"].sudo().search([
-            ("partner_id", "=", partner.id)
-        ], limit=1)
+        students = self._get_current_portal_students()
+        student = students[:1]
 
         enrollments = request.env["training.enrollment"].sudo()
-        if student:
+        if students:
             enrollments = enrollments.search([
-                ("student_id", "=", student.id)
+                ("student_id", "in", students.ids)
             ])
         else:
             enrollments = enrollments.browse()
@@ -31,11 +36,16 @@ class TrainingPortal(CustomerPortal):
             ("state", "=", "confirmed"),
             ("available_seats", ">", 0),
         ])
+        enrollments_by_course = {
+            enrollment.course_id.id: enrollment
+            for enrollment in enrollments
+        }
 
         values = {
             "student": student,
             "enrollments": enrollments,
             "available_courses": available_courses,
+            "enrollments_by_course": enrollments_by_course,
             "page_name": "training",
         }
 
@@ -56,13 +66,7 @@ class TrainingPortal(CustomerPortal):
         **kwargs
     ):
 
-        partner = request.env.user.partner_id
-
-        student = request.env[
-            "training.student"
-        ].sudo().search([
-            ("partner_id", "=", partner.id)
-        ], limit=1)
+        students = self._get_current_portal_students()
 
         enrollment = request.env[
             "training.enrollment"
@@ -71,7 +75,7 @@ class TrainingPortal(CustomerPortal):
         if not enrollment.exists():
             return request.not_found()
 
-        if enrollment.student_id.id != student.id:
+        if enrollment.student_id not in students:
             return request.not_found()
 
         values = {

@@ -4,6 +4,28 @@ from odoo.http import request
 
 class WebsiteTraining(http.Controller):
 
+    def _get_current_portal_students(self):
+        if request.env.user._is_public():
+            return request.env["training.student"].sudo().browse()
+
+        partner = request.env.user.partner_id
+        emails = [email for email in {partner.email, request.env.user.login} if email]
+        domain = [("partner_id", "=", partner.id)]
+        if emails:
+            domain = ["|", ("partner_id", "=", partner.id), ("email", "in", emails)]
+        return request.env["training.student"].sudo().search(domain)
+
+    def _get_current_course_enrollment(self, course):
+        students = self._get_current_portal_students()
+        if not students:
+            return request.env["training.enrollment"].sudo().browse()
+
+        return request.env["training.enrollment"].sudo().search([
+            ("student_id", "in", students.ids),
+            ("course_id", "=", course.id),
+            ("state", "!=", "cancelled"),
+        ], order="id desc", limit=1)
+
     @http.route("/training/courses", type="http", auth="public", website=True)
     def website_courses(self, **kwargs):
         courses = request.env["training.course"].sudo().search([
@@ -29,6 +51,7 @@ class WebsiteTraining(http.Controller):
             "Training_academy_management_system.website_training_course_detail",
             {
                 "course": course,
+                "course_enrollment": self._get_current_course_enrollment(course),
             }
         )
 
@@ -84,19 +107,54 @@ class WebsiteTraining(http.Controller):
                 }
             )
 
-        partner = request.env["res.partner"].sudo().create({
-            "name": name,
-            "email": email,
-            "phone": phone,
-        })
+        existing_enrollment = self._get_current_course_enrollment(course)
+        if existing_enrollment:
+            if not request.env.user._is_public():
+                return request.redirect(
+                    "/my/training/enrollment/%s" % existing_enrollment.id
+                )
+            return request.render(
+                "Training_academy_management_system.website_training_enroll_form",
+                {
+                    "course": course,
+                    "error": "You already have an enrollment for this course.",
+                }
+            )
 
-        student = request.env["training.student"].sudo().create({
+        if request.env.user._is_public():
+            partner = request.env["res.partner"].sudo().create({
+                "name": name,
+                "email": email,
+                "phone": phone,
+            })
+        else:
+            partner = request.env.user.partner_id
+            partner.sudo().write({
+                "name": partner.name or name,
+                "email": partner.email or email,
+                "phone": partner.phone or phone,
+            })
+
+        student = request.env["training.student"].sudo().search([
+            ("partner_id", "=", partner.id),
+        ], limit=1)
+
+        if not student and email:
+            student = request.env["training.student"].sudo().search([
+                ("email", "=", email),
+            ], limit=1)
+
+        student_values = {
             "name": name,
             "email": email,
             "phone": phone,
             "address": address,
             "partner_id": partner.id,
-        })
+        }
+        if student:
+            student.write(student_values)
+        else:
+            student = request.env["training.student"].sudo().create(student_values)
 
         enrollment = request.env["training.enrollment"].sudo().create({
             "student_id": student.id,

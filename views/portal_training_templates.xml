@@ -36,7 +36,7 @@
                     </a>
                 </div>
 
-                <t t-if="not enrollments">
+                <t t-if="not enrollments and not available_courses">
 
                     <div class="training-empty-state">
                         <i class="fa fa-folder-open-o"/>
@@ -44,6 +44,13 @@
                         <p>Your requested and enrolled courses will appear here.</p>
                     </div>
 
+                </t>
+
+                <t t-if="not enrollments and available_courses">
+                    <div class="training-portal-note">
+                        <i class="fa fa-info-circle"/>
+                        <span>You do not have enrollments yet. Choose an approved course below to begin.</span>
+                    </div>
                 </t>
 
                 <t t-if="enrollments">
@@ -120,6 +127,8 @@
                     <t t-if="available_courses">
                         <div class="training-course-grid">
                             <t t-foreach="available_courses" t-as="course">
+                                <t t-set="course_enrollment"
+                                   t-value="enrollments_by_course.get(course.id)"/>
                                 <article class="training-course-card">
                                     <div class="training-course-card__top">
                                         <div class="training-course-icon">
@@ -170,9 +179,20 @@
                                             </t>
                                             <t t-else="">Date pending</t>
                                         </span>
-                                        <a t-att-href="'/training/course/%s' % course.id"
+                                        <a t-if="course_enrollment and course_enrollment.state == 'confirmed' and course_enrollment.due_amount &gt; 0"
+                                           t-att-href="'/my/training/enrollment/%s/pay' % course_enrollment.id"
                                            class="btn training-course-action">
-                                            View Details
+                                            Pay Now
+                                        </a>
+                                        <a t-elif="course_enrollment"
+                                           t-att-href="'/my/training/enrollment/%s' % course_enrollment.id"
+                                           class="btn training-course-action">
+                                            View Enrollment
+                                        </a>
+                                        <a t-else=""
+                                           t-att-href="'/training/course/%s' % course.id"
+                                           class="btn training-course-action">
+                                            Enroll Now
                                         </a>
                                     </div>
                                 </article>

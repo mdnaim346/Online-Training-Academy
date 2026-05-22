@@ -696,6 +696,22 @@
     margin: 0;
 }
 
+.training-portal-note {
+    align-items: center;
+    background: #f6f8fb;
+    border: 1px solid #e3e8ef;
+    border-radius: 8px;
+    color: #52606d;
+    display: flex;
+    gap: 10px;
+    margin-bottom: 24px;
+    padding: 14px 16px;
+}
+
+.training-portal-note i {
+    color: #246b73;
+}
+
 .training-portal-table-wrap,
 .training-portal-detail {
     background: #fff;
