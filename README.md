@@ -129,35 +129,89 @@ Portal routes:
 
 ## Screenshots
 
-Add your screenshots inside:
+### Dashboard
 
-```text
-docs/screenshots/
-```
-
-Recommended screenshot names:
-
-| Page | Screenshot path |
-| --- | --- |
-| Dashboard | `docs/screenshots/dashboard.png` |
-| Courses | `docs/screenshots/courses.png` |
-| Course Form | `docs/screenshots/course-form.png` |
-| Trainers | `docs/screenshots/trainers.png` |
-| Students | `docs/screenshots/students.png` |
-| Enrollments | `docs/screenshots/enrollments.png` |
-| Enrollment Form | `docs/screenshots/enrollment-form.png` |
-| Attendance | `docs/screenshots/attendance.png` |
-| Payments | `docs/screenshots/payments.png` |
-| Certificate PDF | `docs/screenshots/certificate.png` |
-| Website Courses | `docs/screenshots/website-courses.png` |
-| Website Enrollment | `docs/screenshots/website-enrollment.png` |
-| Student Portal | `docs/screenshots/student-portal.png` |
-
-Example:
-
-```markdown
 ![Dashboard](docs/screenshots/dashboard.png)
-```
+
+### Courses
+
+![Courses](docs/screenshots/courses.png)
+
+### Course Form
+
+![Course Form](docs/screenshots/course_form.png)
+
+### Trainers
+
+![Trainers](docs/screenshots/trainers.png)
+
+### Trainer Details
+
+![Trainer Details](docs/screenshots/trainer%20details.png)
+
+### Students
+
+![Students](docs/screenshots/Students.png)
+
+### Student Details
+
+![Student Details](docs/screenshots/student_details.png)
+
+### Enrollments
+
+![Enrollments](docs/screenshots/enrollments.png)
+
+### Enrollment Form
+
+![Enrollment Form](docs/screenshots/enrollment_form.png)
+
+### Attendance
+
+![Attendance](docs/screenshots/attendence.png)
+
+### Payments
+
+![Payments](docs/screenshots/Payments.png)
+
+### Payment Details
+
+![Payment Details](docs/screenshots/payment%20details.png)
+
+### Payment PDF
+
+![Payment PDF](docs/screenshots/Payment_pdf.png)
+
+### Transactions
+
+![Transactions](docs/screenshots/transactions.png)
+
+### Transaction Details
+
+![Transaction Details](docs/screenshots/transaction_details.png)
+
+### Certificate PDF
+
+![Certificate PDF](docs/screenshots/Certificate.png)
+
+### Available Courses
+
+![Available Courses](docs/screenshots/available%20courses.png)
+
+### Portal Dashboard
+
+![Portal Dashboard](docs/screenshots/Portal%20dashboard.png)
+
+### Portal Course Details
+
+![Portal Course Details](docs/screenshots/portal_course_details.png)
+
+### Portal Enrollment Details
+
+![Portal Enrollment Details](docs/screenshots/Portal_Enrollment_details.png)
+
+### Stripe Payment Gateway
+
+![Stripe Payment Gateway](docs/screenshots/Stripe%20Paymnt%20gatway.png)
 
 ## Project Structure
 
